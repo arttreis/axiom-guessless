@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
+import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 
 const PLANS = [
   {
     id: 'starter' as const,
     name: 'Starter',
+    desc: 'Para criadores e marcas pessoais que estão começando.',
     price: 'R$97',
     period: '/mês',
     posts: '30 posts/mês',
@@ -15,6 +17,7 @@ const PLANS = [
   {
     id: 'pro' as const,
     name: 'Pro',
+    desc: 'Para marcas que querem crescer com consistência e estratégia.',
     price: 'R$197',
     period: '/mês',
     posts: '100 posts/mês',
@@ -26,6 +29,7 @@ const PLANS = [
   {
     id: 'agency' as const,
     name: 'Agency',
+    desc: 'Para agências que gerenciam múltiplas marcas em escala.',
     price: 'R$497',
     period: '/mês',
     posts: 'Posts ilimitados',
@@ -37,9 +41,12 @@ const PLANS = [
 ];
 
 export function Pricing() {
+  const headerRef = useScrollAnimation<HTMLDivElement>();
+  const gridRef = useScrollAnimation<HTMLDivElement>();
+
   return (
     <section className="pricing-section">
-      <div className="section-header">
+      <div ref={headerRef} className="section-header scroll-reveal">
         <div className="section-label">PLANOS</div>
         <h2 className="section-title">
           Escolha seu plano e comece
@@ -48,7 +55,7 @@ export function Pricing() {
         </h2>
       </div>
 
-      <div className="pricing-grid">
+      <div ref={gridRef} className="pricing-grid scroll-reveal-grid">
         {PLANS.map((plan) => (
           <div
             key={plan.id}
@@ -58,6 +65,7 @@ export function Pricing() {
 
             <div className="pricing-header">
               <div className="pricing-name">{plan.name}</div>
+              <div className="pricing-plan-desc">{plan.desc}</div>
               <div className="pricing-price">
                 <span className="price-value">{plan.price}</span>
                 <span className="price-period">{plan.period}</span>

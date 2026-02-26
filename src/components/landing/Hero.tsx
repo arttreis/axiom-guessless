@@ -39,8 +39,26 @@ export function Hero() {
           </Link>
         </div>
 
+        {/* Stats bar */}
+        <div className="hero-stats animate-fade-up" style={{ animationDelay: '0.38s' }}>
+          <div className="hero-stat">
+            <span className="hero-stat-value">12</span>
+            <span className="hero-stat-label">Arquétipos</span>
+          </div>
+          <div className="hero-stat-sep" />
+          <div className="hero-stat">
+            <span className="hero-stat-value">4</span>
+            <span className="hero-stat-label">Plataformas</span>
+          </div>
+          <div className="hero-stat-sep" />
+          <div className="hero-stat">
+            <span className="hero-stat-value">5 min</span>
+            <span className="hero-stat-label">Setup</span>
+          </div>
+        </div>
+
         {/* Rodapé */}
-        <p className="hero-footer animate-fade-up" style={{ animationDelay: '0.4s' }}>
+        <p className="hero-footer animate-fade-up" style={{ animationDelay: '0.5s' }}>
           7 dias grátis · Sem cartão de crédito · Cancele quando quiser
         </p>
       </div>

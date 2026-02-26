@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
+import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 
 export function CtaFinal() {
+  const contentRef = useScrollAnimation<HTMLDivElement>();
+
   return (
     <section className="cta-final-section">
-      <div className="cta-final-content">
+      <div ref={contentRef} className="cta-final-content scroll-reveal">
         <h2 className="cta-final-title">
           Pronto para descobrir a
           <br />
