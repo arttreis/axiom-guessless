@@ -1,10 +1,44 @@
-import { createClient } from '@supabase/supabase-js';
+// DEMO MODE — Supabase removido temporariamente para apresentação visual
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Variáveis de ambiente VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY são obrigatórias.');
+/* eslint-disable @typescript-eslint/no-explicit-any */
+function createQueryBuilder(): any {
+  const builder: any = {};
+  builder.select = () => builder;
+  builder.eq = () => builder;
+  builder.order = () => builder;
+  builder.single = () => Promise.resolve({ data: null, error: null });
+  builder.maybeSingle = () => Promise.resolve({ data: null, error: null });
+  builder.insert = () => builder;
+  builder.upsert = () => Promise.resolve({ data: null, error: null });
+  builder.then = (resolve: (v: any) => void) =>
+    resolve({ data: [], error: null, count: null });
+  return builder;
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = {
+  auth: {
+    signUp: async (params: {
+      email: string;
+      password?: string;
+      options?: { data?: { name?: string } };
+    }) => ({
+      data: {
+        user: {
+          id: 'demo-user-id',
+          email: params.email,
+          user_metadata: { name: params.options?.data?.name ?? 'Demo' },
+          aud: 'authenticated',
+          created_at: new Date().toISOString(),
+        },
+        session: null,
+      },
+      error: null,
+    }),
+    getSession: async () => ({ data: { session: null }, error: null }),
+    onAuthStateChange: (_callback: unknown) => ({
+      data: { subscription: { unsubscribe: () => {} } },
+    }),
+    signOut: async () => ({ error: null }),
+  },
+  from: (_table: string) => createQueryBuilder(),
+};

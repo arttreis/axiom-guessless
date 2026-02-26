@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { createCheckoutSession, PLAN_FEATURES } from '../lib/stripe';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
+import { PLAN_FEATURES } from '../lib/stripe';
+import { useAuthStore } from '../store/authStore';
 import { showToast } from '../components/Toast';
+import type { User } from '@supabase/supabase-js';
 
 type Plan = 'starter' | 'pro' | 'agency';
 
 export function Checkout() {
   const [searchParams] = useSearchParams();
   const initialPlan = (searchParams.get('plan') as Plan) ?? 'pro';
+  const navigate = useNavigate();
 
   const [plan, setPlan] = useState<Plan>(initialPlan);
   const [name, setName] = useState('');
@@ -27,23 +29,28 @@ export function Checkout() {
       return;
     }
     setLoading(true);
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { name } },
-      });
-      if (error) throw error;
-      if (!data.user) throw new Error('Usuário não criado.');
 
-      showToast('success', 'Conta criada! Redirecionando para pagamento...');
-      await createCheckoutSession(plan, data.user.id, email);
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Erro ao criar conta.';
-      showToast('error', msg);
-    } finally {
-      setLoading(false);
-    }
+    // DEMO MODE — Simular criação de conta sem Supabase/Stripe
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const { setUser, setProfile } = useAuthStore.getState();
+    setUser({ id: 'demo-user-id', email } as unknown as User);
+    setProfile({
+      id: 'demo-user-id',
+      name,
+      email,
+      plan,
+      stripe_customer_id: '',
+      stripe_subscription_id: '',
+      subscription_status: 'active',
+      trial_ends_at: '',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
+
+    showToast('success', 'Conta criada! Iniciando onboarding...');
+    setLoading(false);
+    navigate('/onboarding');
   };
 
   const planInfo = PLAN_FEATURES[plan];

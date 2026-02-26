@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ProgressBar } from '../components/onboarding/ProgressBar';
 import { QuestionBlock } from '../components/onboarding/QuestionBlock';
 import { ONBOARDING_STEPS } from '../constants/onboarding';
-import { supabase } from '../lib/supabase';
 import { analyzeArchetypes } from '../lib/anthropic';
-import { useAuthStore } from '../store/authStore';
 import { useOnboardingStore } from '../store/onboardingStore';
 import { showToast } from '../components/Toast';
 import type { OnboardingData } from '../types';
@@ -25,8 +23,7 @@ function exportToCSV(data: Record<string, string>, brandName: string) {
 
 export function Onboarding() {
   const navigate = useNavigate();
-  const { user } = useAuthStore();
-  const { currentStep, answers, nextStep, prevStep, setAnswer } = useOnboardingStore();
+  const { currentStep, answers, nextStep, prevStep, setAnswer, setArchetypeResult } = useOnboardingStore();
   const [loading, setLoading] = useState(false);
 
   const step = ONBOARDING_STEPS[currentStep];
@@ -48,32 +45,15 @@ export function Onboarding() {
       return;
     }
 
-    // Último passo — salvar e analisar
-    if (!user) return;
+    // Último passo — analisar arquétipos (DEMO MODE: sem Supabase)
     setLoading(true);
     try {
-      // 1. Salvar no Supabase
-      const { error: saveError } = await supabase
-        .from('onboarding_responses')
-        .upsert({ ...answers, user_id: user.id }, { onConflict: 'user_id' });
-      if (saveError) throw saveError;
-
-      // 2. Analisar arquétipos
       const result = await analyzeArchetypes(answers as OnboardingData);
 
-      // 3. Salvar resultado
-      const { error: archError } = await supabase
-        .from('archetype_results')
-        .upsert({
-          user_id: user.id,
-          scores: result.scores,
-          primary_archetype: result.primary_archetype,
-          secondary_archetype: result.secondary_archetype,
-          analysis: result.analysis,
-        }, { onConflict: 'user_id' });
-      if (archError) throw archError;
+      // Armazenar resultado no Zustand store
+      setArchetypeResult(result);
 
-      // 4. Exportar CSV
+      // Exportar CSV
       exportToCSV(answers as Record<string, string>, (answers.brand_name as string) ?? 'marca');
 
       showToast('success', 'Análise concluída! Redirecionando...');

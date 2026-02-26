@@ -19,25 +19,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   profile: null,
   session: null,
-  isLoading: true,
+  isLoading: false, // DEMO MODE: sem loading inicial
 
   setUser: (user) => set({ user }),
   setProfile: (profile) => set({ profile }),
   setSession: (session) => set({ session }),
 
-  fetchProfile: async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (error) throw error;
-      set({ profile: data as Profile });
-    } catch (error) {
-      console.error('Erro ao buscar perfil:', error);
-    }
+  fetchProfile: async (_userId: string) => {
+    // DEMO MODE: perfil gerenciado pelo Checkout
   },
 
   signOut: async () => {
