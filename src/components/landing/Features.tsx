@@ -1,3 +1,5 @@
+import { useScrollAnimation } from '../../hooks/useScrollAnimation';
+
 const FEATURES = [
   {
     icon: '⬡',
@@ -22,9 +24,12 @@ const FEATURES = [
 ];
 
 export function Features() {
+  const headerRef = useScrollAnimation<HTMLDivElement>();
+  const gridRef = useScrollAnimation<HTMLDivElement>();
+
   return (
     <section className="features-section">
-      <div className="section-header">
+      <div ref={headerRef} className="section-header scroll-reveal">
         <div className="section-label">FUNCIONALIDADES</div>
         <h2 className="section-title">
           Tudo que sua marca precisa para
@@ -33,7 +38,7 @@ export function Features() {
         </h2>
       </div>
 
-      <div className="features-grid">
+      <div ref={gridRef} className="features-grid scroll-reveal-grid">
         {FEATURES.map((f) => (
           <div key={f.title} className="feature-card">
             <div className="feature-icon">{f.icon}</div>

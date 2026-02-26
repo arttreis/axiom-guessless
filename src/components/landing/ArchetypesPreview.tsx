@@ -1,9 +1,13 @@
 import { ARCHETYPES } from '../../constants/archetypes';
+import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 
 export function ArchetypesPreview() {
+  const headerRef = useScrollAnimation<HTMLDivElement>();
+  const gridRef = useScrollAnimation<HTMLDivElement>();
+
   return (
     <section className="archetypes-section">
-      <div className="section-header">
+      <div ref={headerRef} className="section-header scroll-reveal">
         <div className="section-label">OS 12 ARQUÉTIPOS</div>
         <h2 className="section-title">
           Qual é a personalidade
@@ -15,7 +19,7 @@ export function ArchetypesPreview() {
         </p>
       </div>
 
-      <div className="archetypes-grid">
+      <div ref={gridRef} className="archetypes-grid scroll-reveal-grid">
         {ARCHETYPES.map((arch) => (
           <div
             key={arch.name}
