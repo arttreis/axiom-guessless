@@ -5,6 +5,8 @@ import { QuestionBlock } from '../components/onboarding/QuestionBlock';
 import { ONBOARDING_STEPS } from '../constants/onboarding';
 import { analyzeArchetypes } from '../lib/anthropic';
 import { useOnboardingStore } from '../store/onboardingStore';
+import { useAuthStore } from '../store/authStore';
+import { supabase } from '../lib/supabase';
 import { showToast } from '../components/Toast';
 import type { OnboardingData } from '../types';
 
@@ -24,6 +26,7 @@ function exportToCSV(data: Record<string, string>, brandName: string) {
 export function Onboarding() {
   const navigate = useNavigate();
   const { currentStep, answers, nextStep, prevStep, setAnswer, setArchetypeResult } = useOnboardingStore();
+  const user = useAuthStore((s) => s.user);
   const [loading, setLoading] = useState(false);
 
   const step = ONBOARDING_STEPS[currentStep];
@@ -45,15 +48,32 @@ export function Onboarding() {
       return;
     }
 
-    // Último passo — analisar arquétipos (DEMO MODE: sem Supabase)
     setLoading(true);
     try {
       const result = await analyzeArchetypes(answers as OnboardingData);
 
-      // Armazenar resultado no Zustand store
       setArchetypeResult(result);
 
-      // Exportar CSV
+      if (user) {
+        const completedAt = new Date().toISOString();
+
+        await Promise.all([
+          supabase.from('onboarding_responses').upsert({
+            user_id: user.id,
+            ...answers,
+            completed_at: completedAt,
+          }),
+          supabase.from('archetype_results').upsert({
+            user_id: user.id,
+            scores: result.scores,
+            primary_archetype: result.primary_archetype,
+            secondary_archetype: result.secondary_archetype,
+            analysis: result.analysis,
+            generated_at: completedAt,
+          }),
+        ]);
+      }
+
       exportToCSV(answers as Record<string, string>, (answers.brand_name as string) ?? 'marca');
 
       showToast('success', 'Análise concluída! Redirecionando...');
