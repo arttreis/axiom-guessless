@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { PLAN_FEATURES } from '../lib/stripe';
 import { useAuthStore } from '../store/authStore';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { showToast } from '../components/Toast';
 
 type Plan = 'starter' | 'pro' | 'agency';
@@ -22,6 +22,10 @@ export function Checkout() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isSupabaseConfigured) {
+      showToast('error', 'Supabase não configurado. Adicione VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY nas variáveis de ambiente.');
+      return;
+    }
     if (!name || !email || !password) {
       showToast('error', 'Preencha todos os campos obrigatórios.');
       return;
@@ -66,6 +70,10 @@ export function Checkout() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isSupabaseConfigured) {
+      showToast('error', 'Supabase não configurado. Adicione VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY nas variáveis de ambiente.');
+      return;
+    }
     if (!email || !password) {
       showToast('error', 'Preencha email e senha.');
       return;
