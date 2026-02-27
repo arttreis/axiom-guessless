@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { PLAN_FEATURES } from '../lib/stripe';
 import { useAuthStore } from '../store/authStore';
+import { supabase } from '../lib/supabase';
 import { showToast } from '../components/Toast';
-import type { User } from '@supabase/supabase-js';
 
 type Plan = 'starter' | 'pro' | 'agency';
 
@@ -30,27 +30,36 @@ export function Checkout() {
     }
     setLoading(true);
 
-    // DEMO MODE — Simular criação de conta sem Supabase/Stripe
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { name } },
+      });
 
-    const { setUser, setProfile } = useAuthStore.getState();
-    setUser({ id: 'demo-user-id', email } as unknown as User);
-    setProfile({
-      id: 'demo-user-id',
-      name,
-      email,
-      plan,
-      stripe_customer_id: '',
-      stripe_subscription_id: '',
-      subscription_status: 'active',
-      trial_ends_at: '',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    });
+      if (error) {
+        showToast('error', error.message);
+        return;
+      }
 
-    showToast('success', 'Conta criada! Iniciando onboarding...');
-    setLoading(false);
-    navigate('/onboarding');
+      if (data.user) {
+        await supabase
+          .from('profiles')
+          .update({ plan, name })
+          .eq('id', data.user.id);
+
+        useAuthStore.getState().setUser(data.user);
+        useAuthStore.getState().fetchProfile(data.user.id);
+      }
+
+      showToast('success', 'Conta criada! Iniciando onboarding...');
+      navigate('/onboarding');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Erro ao criar conta.';
+      showToast('error', msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const planInfo = PLAN_FEATURES[plan];

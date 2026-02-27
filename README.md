@@ -187,14 +187,38 @@ background: linear-gradient(135deg, #FF6B35 0%, #CC5DE8 50%, #4D96FF 100%);
 
 ---
 
+## Estado Atual do Projeto
+
+> **Modo demo ativo.** O projeto roda com dados fictícios para apresentação. Todas as integrações reais (Supabase, Stripe, Claude API) estão mockadas.
+>
+> Para ativar o modo real, siga o guia de setup abaixo e defina `VITE_STATIC_MODE=false`.
+
+### O que está pronto
+- [x] UI/UX completa (Landing, Checkout, Onboarding, Dashboard, Content)
+- [x] Design system (Tailwind CSS, fontes, cores)
+- [x] Schema do banco de dados com RLS
+- [x] Lógica de IA (arquétipos + geração de posts)
+- [x] Build sem erros (`npm run typecheck` ✅, `npm run build` ✅)
+
+### O que ainda precisa ser implementado (modo real)
+- [ ] Ativar cliente real do Supabase em `src/lib/supabase.ts`
+- [ ] Implementar Stripe Checkout real em `src/lib/stripe.ts`
+- [ ] Implementar listener de auth em `src/hooks/useAuth.ts`
+- [ ] Persistir dados no banco (`src/hooks/useOnboarding.ts`, `src/hooks/usePosts.ts`)
+- [ ] Criar Edge Functions (`supabase/functions/stripe-webhook`, `stripe-portal`)
+- [ ] Conectar `src/pages/Checkout.tsx` ao Supabase Auth real
+
+---
+
 ## Como Rodar Localmente
 
 ### Pré-requisitos
 
 - Node.js 18+
-- Conta Supabase
-- Conta Stripe
-- Chave API Anthropic
+- [Supabase CLI](https://supabase.com/docs/guides/cli/getting-started) instalado
+- Conta no [Supabase](https://app.supabase.com) (plano free funciona)
+- Conta no [Stripe](https://dashboard.stripe.com) (modo teste)
+- Chave API na [Anthropic](https://console.anthropic.com)
 
 ### Instalação
 
@@ -204,41 +228,89 @@ npm install
 
 # 2. Copiar e preencher variáveis de ambiente
 cp .env.example .env
+# Edite o .env com suas chaves (ver seção abaixo)
 ```
 
 ### Variáveis de Ambiente
 
 ```env
-# Supabase
-VITE_SUPABASE_URL=https://SEU_PROJETO.supabase.co
-VITE_SUPABASE_ANON_KEY=sua_chave_anon
+# Modo de operação
+# true  = demo/apresentação (sem Supabase/Stripe)
+# false = produção (integrações reais ativas)
+VITE_STATIC_MODE=false
 
-# Stripe
-VITE_STRIPE_PUBLISHABLE_KEY=pk_test_...
-VITE_STRIPE_PRICE_STARTER=price_...
-VITE_STRIPE_PRICE_PRO=price_...
-VITE_STRIPE_PRICE_AGENCY=price_...
+# Supabase → app.supabase.com → seu projeto → Settings → API
+VITE_SUPABASE_URL=https://xxxx.supabase.co   # "Project URL"
+VITE_SUPABASE_ANON_KEY=eyJ...                # "anon public"
 
-# Anthropic
+# Stripe → dashboard.stripe.com → Developers → API Keys
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_...      # "Publishable key"
+VITE_STRIPE_PRICE_STARTER=price_...          # Price ID do plano Starter
+VITE_STRIPE_PRICE_PRO=price_...              # Price ID do plano Pro
+VITE_STRIPE_PRICE_AGENCY=price_...           # Price ID do plano Agency
+
+# Anthropic → console.anthropic.com → API Keys
 VITE_ANTHROPIC_API_KEY=sk-ant-...
 
-# App
+# URL da aplicação
 VITE_APP_URL=http://localhost:5173
 ```
+
+### Passo a passo: criar produtos no Stripe
+
+1. Acesse **dashboard.stripe.com → Products → Add product**
+2. Crie os 3 produtos abaixo (cobrança recorrente mensal):
+
+| Nome | Preço | Copiar campo |
+|------|-------|-------------|
+| Starter | R$ 97/mês | `VITE_STRIPE_PRICE_STARTER` |
+| Pro | R$ 197/mês | `VITE_STRIPE_PRICE_PRO` |
+| Agency | R$ 497/mês | `VITE_STRIPE_PRICE_AGENCY` |
+
+3. Em cada produto, clique no **Price** criado e copie o **Price ID** (`price_xxxx`) para o `.env`
+
+> Use sempre chaves de **teste** (`pk_test_`, `price_test_`) durante o desenvolvimento. Substitua pelas de produção somente no deploy final.
 
 ### Banco de Dados
 
 ```bash
 # Aplicar migrations no Supabase
-supabase db push
+npx supabase db push
 ```
+
+### Edge Functions (Stripe Webhook)
+
+Para processar pagamentos, crie as edge functions no Supabase:
+
+```bash
+# Criar as funções
+npx supabase functions new stripe-webhook
+npx supabase functions new stripe-portal
+
+# Configurar secrets (obter no Stripe → Developers → API Keys)
+npx supabase secrets set STRIPE_SECRET_KEY=sk_test_...
+npx supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Deploy das funções
+npx supabase functions deploy stripe-webhook
+npx supabase functions deploy stripe-portal
+```
+
+**Criar o webhook no Stripe:**
+
+1. Acesse **Stripe → Developers → Webhooks → Add endpoint**
+2. URL: `https://xxxx.supabase.co/functions/v1/stripe-webhook`
+3. Eventos: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
+4. Copie o **Signing secret** (`whsec_...`) e configure em `STRIPE_WEBHOOK_SECRET`
 
 ### Desenvolvimento
 
 ```bash
-npm run dev     # Inicia servidor de desenvolvimento (localhost:5173)
-npm run build   # Build de produção
-npm run typecheck  # Verificar tipos TypeScript
+npm run dev          # Servidor de desenvolvimento (localhost:5173)
+npm run build        # Build de produção
+npm run preview      # Preview do build localmente
+npm run typecheck    # Verificar tipos TypeScript
+npm run lint         # Verificar linting
 ```
 
 ---
