@@ -11,6 +11,7 @@ interface AuthStore {
   setUser: (user: User | null) => void;
   setProfile: (profile: Profile | null) => void;
   setSession: (session: Session | null) => void;
+  setLoading: (isLoading: boolean) => void;
   signOut: () => Promise<void>;
   fetchProfile: (userId: string) => Promise<void>;
 }
@@ -19,11 +20,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   profile: null,
   session: null,
-  isLoading: false,
+  isLoading: true,
 
   setUser: (user) => set({ user }),
   setProfile: (profile) => set({ profile }),
   setSession: (session) => set({ session }),
+  setLoading: (isLoading) => set({ isLoading }),
 
   fetchProfile: async (userId: string) => {
     const { data, error } = await supabase

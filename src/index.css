@@ -1000,6 +1000,34 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 .checkout-plan-features li { font-size: 0.875rem; color: var(--text-secondary); }
 .checkout-login { text-align: center; color: var(--text-muted); font-size: 0.85rem; }
 
+.checkout-mode-toggle {
+  display: flex;
+  background: var(--dark-3);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+.mode-btn {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 9px;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.mode-btn:hover { color: var(--text-primary); }
+.mode-btn--active {
+  background: var(--dark-2);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 /* ============================================
    ONBOARDING
    ============================================ */
