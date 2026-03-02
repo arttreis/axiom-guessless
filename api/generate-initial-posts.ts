@@ -80,7 +80,7 @@ Responda APENAS com JSON válido, sem markdown:
     },
     body: JSON.stringify({
       model: ANTHROPIC_MODEL,
-      max_tokens: 8000,
+      max_tokens: 4000,
       messages: [{ role: 'user', content: prompt }],
     }),
   });

@@ -6,6 +6,7 @@ import type { Post, GeneratedPost, OnboardingData, ArchetypeResult } from '../ty
 export function usePosts() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
 
   const fetchPosts = useCallback(async () => {
     const user = useAuthStore.getState().user;
@@ -37,16 +38,23 @@ export function usePosts() {
 
     if (count && count > 0) return;
 
+    setIsInitializing(true);
     const res = await fetch('/api/generate-initial-posts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ onboarding, archetypeResult }),
     });
 
-    if (!res.ok) return;
+    if (!res.ok) {
+      setIsInitializing(false);
+      return;
+    }
 
     const json = await res.json() as { posts: Omit<GeneratedPost, 'platform'>[] };
-    if (!json.posts?.length) return;
+    if (!json.posts?.length) {
+      setIsInitializing(false);
+      return;
+    }
 
     const rows = json.posts.map((p) => ({
       ...p,
@@ -59,6 +67,7 @@ export function usePosts() {
 
     const { data } = await supabase.from('posts').insert(rows).select();
     if (data) setPosts(data as Post[]);
+    setIsInitializing(false);
   }, []);
 
   const savePost = useCallback(async (generated: GeneratedPost): Promise<Post | null> => {
@@ -97,5 +106,5 @@ export function usePosts() {
     fetchPosts();
   }, [fetchPosts]);
 
-  return { posts, loading, fetchPosts, initializePosts, savePost };
+  return { posts, loading, isInitializing, fetchPosts, initializePosts, savePost };
 }

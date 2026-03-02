@@ -4,25 +4,16 @@ import { ArchetypeHero } from '../components/dashboard/ArchetypeHero';
 import { ArchetypeGrid } from '../components/dashboard/ArchetypeGrid';
 import { BrandProfile } from '../components/dashboard/BrandProfile';
 import { useOnboarding } from '../hooks/useOnboarding';
-import { usePosts } from '../hooks/usePosts';
-import type { OnboardingData } from '../types';
 
 export function Dashboard() {
   const navigate = useNavigate();
   const { onboarding, archetypeResult, loading } = useOnboarding();
-  const { initializePosts } = usePosts();
 
   useEffect(() => {
     if (!loading && !onboarding) {
       navigate('/onboarding', { replace: true });
     }
   }, [loading, onboarding, navigate]);
-
-  useEffect(() => {
-    if (onboarding && archetypeResult) {
-      void initializePosts(onboarding as Partial<OnboardingData>, archetypeResult);
-    }
-  }, [onboarding, archetypeResult, initializePosts]);
 
   if (loading) {
     return (
