@@ -20,13 +20,30 @@ const STATUS_LABELS: Record<string, string> = {
   scheduled: 'Agendado',
 };
 
+const STATUS_CYCLE: Array<'draft' | 'published' | 'scheduled'> = ['draft', 'published', 'scheduled'];
+
 interface PostCardProps {
   post: Post;
+  onDelete?: (postId: string) => void;
+  onStatusChange?: (postId: string, status: 'draft' | 'published' | 'scheduled') => void;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, onDelete, onStatusChange }: PostCardProps) {
   const [expanded, setExpanded] = useState(false);
   const statusColor = STATUS_COLORS[post.status] ?? '#A0A0B0';
+
+  const handleStatusClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!onStatusChange) return;
+    const currentIndex = STATUS_CYCLE.indexOf(post.status as 'draft' | 'published' | 'scheduled');
+    const nextStatus = STATUS_CYCLE[(currentIndex + 1) % STATUS_CYCLE.length];
+    onStatusChange(post.id, nextStatus);
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onDelete) onDelete(post.id);
+  };
 
   return (
     <div
@@ -42,11 +59,21 @@ export function PostCard({ post }: PostCardProps) {
         </div>
         <div className="post-card-top-right">
           <div
-            className="post-status-badge"
+            className="post-status-badge post-status-badge--clickable"
             style={{ color: statusColor, background: `${statusColor}22`, borderColor: `${statusColor}44` }}
+            onClick={handleStatusClick}
+            title="Clique para alterar status"
           >
             {STATUS_LABELS[post.status] ?? post.status}
           </div>
+          <button
+            className="post-delete-btn"
+            onClick={handleDelete}
+            title="Excluir post"
+            type="button"
+          >
+            ✕
+          </button>
           <span className={`post-expand-icon${expanded ? ' post-expand-icon--open' : ''}`}>
             ›
           </span>

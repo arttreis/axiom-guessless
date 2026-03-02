@@ -102,9 +102,38 @@ export function usePosts() {
     return saved;
   }, []);
 
+  const deletePost = useCallback(async (postId: string): Promise<boolean> => {
+    const user = useAuthStore.getState().user;
+    if (!user) return false;
+    const { error } = await supabase
+      .from('posts')
+      .delete()
+      .eq('id', postId)
+      .eq('user_id', user.id);
+    if (error) { console.error('Erro ao excluir post:', error); return false; }
+    setPosts((prev) => prev.filter((p) => p.id !== postId));
+    return true;
+  }, []);
+
+  const updatePostStatus = useCallback(async (
+    postId: string,
+    status: 'draft' | 'published' | 'scheduled',
+  ): Promise<boolean> => {
+    const user = useAuthStore.getState().user;
+    if (!user) return false;
+    const { error } = await supabase
+      .from('posts')
+      .update({ status })
+      .eq('id', postId)
+      .eq('user_id', user.id);
+    if (error) { console.error('Erro ao atualizar status:', error); return false; }
+    setPosts((prev) => prev.map((p) => p.id === postId ? { ...p, status } : p));
+    return true;
+  }, []);
+
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
-  return { posts, loading, isInitializing, fetchPosts, initializePosts, savePost };
+  return { posts, loading, isInitializing, fetchPosts, initializePosts, savePost, deletePost, updatePostStatus };
 }

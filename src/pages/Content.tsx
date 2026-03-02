@@ -9,7 +9,7 @@ import { showToast } from '../components/Toast';
 import type { GeneratedPost, OnboardingData } from '../types';
 
 export function Content() {
-  const { posts, loading, isInitializing, savePost, initializePosts } = usePosts();
+  const { posts, loading, isInitializing, savePost, initializePosts, deletePost, updatePostStatus } = usePosts();
   const { onboarding, archetypeResult } = useOnboarding();
   const [showGenerator, setShowGenerator] = useState(false);
   const [filter, setFilter] = useState<FilterValue>('Todos');
@@ -30,6 +30,17 @@ export function Content() {
     } else {
       showToast('error', 'Erro ao salvar post gerado.');
     }
+  };
+
+  const handleDelete = async (postId: string) => {
+    const ok = await deletePost(postId);
+    if (ok) showToast('success', 'Post excluído.');
+    else showToast('error', 'Erro ao excluir post.');
+  };
+
+  const handleStatusChange = async (postId: string, status: 'draft' | 'published' | 'scheduled') => {
+    const ok = await updatePostStatus(postId, status);
+    if (!ok) showToast('error', 'Erro ao atualizar status.');
   };
 
   return (
@@ -81,7 +92,12 @@ export function Content() {
       ) : (
         <div className="posts-grid">
           {filteredPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard
+              key={post.id}
+              post={post}
+              onDelete={handleDelete}
+              onStatusChange={handleStatusChange}
+            />
           ))}
         </div>
       )}

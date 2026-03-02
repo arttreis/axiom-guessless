@@ -49,11 +49,43 @@ Crie exatamente 12 posts para Instagram totalmente personalizados para esta marc
 Distribuição obrigatória: 4 Carrosséis, 3 Reels, 3 Posts, 2 Stories.
 Tipos nessa ordem exata: ${POST_TYPES.join(', ')}.
 
-Regras:
+FORMATO DE CONTEÚDO POR TIPO:
+
+Para CARROSSEL, o campo "content" deve seguir exatamente esta estrutura de slides:
+CAPA
+Título: [título impactante que gera curiosidade]
+Subtítulo: [frase de apoio que complementa o título]
+
+SLIDE 2
+Título: [desenvolvimento do tema]
+Texto: [explicação ou dado relevante]
+Subtítulo: [frase de reforço ou dado]
+
+SLIDE 3
+Título: [aprofundamento ou virada]
+Texto: [conteúdo principal]
+
+SLIDE FINAL (CTA)
+Título: [mensagem de fechamento]
+Em destaque: [frase memorável da marca]
+CTA: [chamada para ação clara]
+
+LEGENDA
+[Texto completo da legenda para publicar na descrição do post, 3-5 parágrafos, tom da marca, sem hashtags aqui]
+
+Para REELS, o campo "content" deve ser o roteiro narrado:
+GANCHO (0-3s): [frase de abertura impactante]
+DESENVOLVIMENTO: [conteúdo principal em bullets curtos]
+CTA FINAL: [chamada para ação]
+LEGENDA: [texto da legenda para a descrição]
+
+Para POST e STORY, o campo "content" deve ser o texto completo pronto para publicar, com emojis e quebras de linha naturais, seguido de:
+LEGENDA: [se aplicável, o texto da legenda]
+
+Regras gerais:
 - Cada post deve refletir o arquétipo ${archetypeResult.primary_archetype} e o negócio real da marca
-- Use o nome da marca (${onboarding.brand_name ?? 'a marca'}) naturalmente no conteúdo quando fizer sentido
+- Use o nome da marca (${onboarding.brand_name ?? 'a marca'}) naturalmente quando fizer sentido
 - Conteúdo variado: educativo, inspiracional, bastidores, depoimentos, produto, storytelling
-- Inclua emojis relevantes
 - Hashtags específicas para o nicho da marca (não genéricas)
 - Dicas de publicação práticas e específicas
 
@@ -62,7 +94,7 @@ Responda APENAS com JSON válido, sem markdown:
   "posts": [
     {
       "title": "título chamativo do post",
-      "content": "texto completo pronto para publicar no Instagram, com emojis e quebras de linha",
+      "content": "estrutura completa conforme o tipo (Carrossel/Reels/Post/Story)",
       "type": "Carrossel|Reels|Post|Story",
       "archetype": "arquétipo predominante neste post",
       "hashtags": ["#tag1", "#tag2", "#tag3", "#tag4", "#tag5"],
