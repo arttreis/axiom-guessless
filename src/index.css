@@ -1237,11 +1237,24 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   display: flex;
   flex-direction: column;
   gap: 0.875rem;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   cursor: default;
 }
+.post-card--clickable { cursor: pointer; }
+.post-card--clickable:hover { border-color: rgba(255,107,53,0.35); box-shadow: 0 4px 20px rgba(255,107,53,0.08); }
+.post-card--expanded { border-color: rgba(255,107,53,0.4); }
 .post-card:hover { border-color: rgba(255,107,53,0.25); }
 .post-card-top { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.post-card-top-right { display: flex; align-items: center; gap: 0.5rem; }
+.post-expand-icon {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: transform 0.2s;
+  display: inline-block;
+  transform: rotate(0deg);
+}
+.post-expand-icon--open { transform: rotate(90deg); color: var(--orange); }
 .post-platform { display: flex; align-items: center; gap: 0.375rem; color: var(--text-muted); font-size: 0.8rem; }
 .post-platform-name { font-weight: 600; color: var(--text-secondary); }
 .post-type {
@@ -1278,7 +1291,41 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  transition: all 0.2s;
 }
+.post-content-preview--expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  white-space: pre-line;
+}
+.post-expanded-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.post-hashtags { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+.post-hashtag {
+  font-size: 0.75rem;
+  color: var(--orange);
+  background: rgba(255,107,53,0.1);
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+}
+.post-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.04);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+.post-tip-icon { flex-shrink: 0; }
 .post-card-footer {
   display: flex;
   align-items: center;

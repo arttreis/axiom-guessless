@@ -5,11 +5,12 @@ import { ArchetypeGrid } from '../components/dashboard/ArchetypeGrid';
 import { BrandProfile } from '../components/dashboard/BrandProfile';
 import { useOnboarding } from '../hooks/useOnboarding';
 import { usePosts } from '../hooks/usePosts';
+import type { OnboardingData } from '../types';
 
 export function Dashboard() {
   const navigate = useNavigate();
   const { onboarding, archetypeResult, loading } = useOnboarding();
-  const { insertSamplePosts } = usePosts();
+  const { initializePosts } = usePosts();
 
   useEffect(() => {
     if (!loading && !onboarding) {
@@ -18,10 +19,10 @@ export function Dashboard() {
   }, [loading, onboarding, navigate]);
 
   useEffect(() => {
-    if (onboarding) {
-      void insertSamplePosts();
+    if (onboarding && archetypeResult) {
+      void initializePosts(onboarding as Partial<OnboardingData>, archetypeResult);
     }
-  }, [onboarding, insertSamplePosts]);
+  }, [onboarding, archetypeResult, initializePosts]);
 
   if (loading) {
     return (

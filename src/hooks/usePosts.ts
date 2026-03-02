@@ -1,8 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/authStore';
-import { SAMPLE_POSTS } from '../constants/samplePosts';
-import type { Post, GeneratedPost } from '../types';
+import type { Post, GeneratedPost, OnboardingData, ArchetypeResult } from '../types';
 
 export function usePosts() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -24,7 +23,10 @@ export function usePosts() {
     }
   }, []);
 
-  const insertSamplePosts = useCallback(async () => {
+  const initializePosts = useCallback(async (
+    onboarding: Partial<OnboardingData>,
+    archetypeResult: ArchetypeResult,
+  ) => {
     const user = useAuthStore.getState().user;
     if (!user) return;
 
@@ -35,7 +37,26 @@ export function usePosts() {
 
     if (count && count > 0) return;
 
-    const rows = SAMPLE_POSTS.map((p) => ({ ...p, user_id: user.id }));
+    const res = await fetch('/api/generate-initial-posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ onboarding, archetypeResult }),
+    });
+
+    if (!res.ok) return;
+
+    const json = await res.json() as { posts: Omit<GeneratedPost, 'platform'>[] };
+    if (!json.posts?.length) return;
+
+    const rows = json.posts.map((p) => ({
+      ...p,
+      platform: 'Instagram' as const,
+      user_id: user.id,
+      status: 'draft' as const,
+      likes: 0,
+      engagement: '-',
+    }));
+
     const { data } = await supabase.from('posts').insert(rows).select();
     if (data) setPosts(data as Post[]);
   }, []);
@@ -76,5 +97,5 @@ export function usePosts() {
     fetchPosts();
   }, [fetchPosts]);
 
-  return { posts, loading, fetchPosts, insertSamplePosts, savePost };
+  return { posts, loading, fetchPosts, initializePosts, savePost };
 }
