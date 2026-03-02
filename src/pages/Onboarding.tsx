@@ -62,7 +62,7 @@ export function Onboarding() {
             user_id: user.id,
             ...answers,
             completed_at: completedAt,
-          }),
+          }, { onConflict: 'user_id' }),
           supabase.from('archetype_results').upsert({
             user_id: user.id,
             scores: result.scores,
@@ -70,7 +70,7 @@ export function Onboarding() {
             secondary_archetype: result.secondary_archetype,
             analysis: result.analysis,
             generated_at: completedAt,
-          }),
+          }, { onConflict: 'user_id' }),
         ]);
       }
 

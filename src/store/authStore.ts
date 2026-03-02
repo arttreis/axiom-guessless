@@ -28,13 +28,31 @@ export const useAuthStore = create<AuthStore>((set) => ({
   setLoading: (isLoading) => set({ isLoading }),
 
   fetchProfile: async (userId: string) => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', userId)
-      .single();
-    if (!error && data) {
+      .maybeSingle();
+
+    if (data) {
       set({ profile: data as Profile });
+      return;
+    }
+
+    // Perfil não encontrado — trigger pode ter falhado, cria manualmente
+    const { data: { user } } = await supabase.auth.getUser();
+    const { data: newProfile } = await supabase
+      .from('profiles')
+      .upsert({
+        id: userId,
+        email: user?.email ?? '',
+        name: user?.user_metadata?.name ?? '',
+      })
+      .select()
+      .maybeSingle();
+
+    if (newProfile) {
+      set({ profile: newProfile as Profile });
     }
   },
 
