@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
+import { Login } from './pages/Login';
 import { Landing } from './pages/Landing';
 import { Checkout } from './pages/Checkout';
 import { Onboarding } from './pages/Onboarding';
@@ -15,7 +16,8 @@ function AppRoutes() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/landing" element={<Landing />} />
         <Route path="/checkout" element={<Checkout />} />
 
         <Route
