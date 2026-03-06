@@ -87,8 +87,7 @@ export function Login() {
   if (isLoading) {
     return (
       <div className="loading-screen">
-        <div className="loading-icon animate-pulse">✦</div>
-        <p className="loading-text">Axiom</p>
+        <p className="loading-text">AXIOM</p>
       </div>
     );
   }
@@ -195,7 +194,7 @@ export function Login() {
         </form>
 
         <p className="checkout-security">
-          🔒 Seus dados são protegidos com criptografia de ponta a ponta
+          Seus dados são protegidos com criptografia de ponta a ponta
         </p>
       </div>
     </div>

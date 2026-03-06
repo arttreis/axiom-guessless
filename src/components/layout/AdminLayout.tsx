@@ -1,4 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Users, ArrowLeft } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
 export function AdminLayout() {
@@ -22,22 +23,23 @@ export function AdminLayout() {
             to="/admin/overview"
             className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
           >
-            <span className="sidebar-icon">◈</span>
+            <LayoutDashboard size={15} className="sidebar-icon" />
             Visão Geral
           </NavLink>
           <NavLink
             to="/admin/users"
             className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
           >
-            <span className="sidebar-icon">✦</span>
+            <Users size={15} className="sidebar-icon" />
             Usuários
           </NavLink>
         </nav>
 
         <div className="sidebar-divider" />
 
-        <NavLink to="/dashboard" className="sidebar-link" style={{ fontSize: '0.8rem', opacity: 0.7 }}>
-          ← Voltar ao app
+        <NavLink to="/dashboard" className="sidebar-link" style={{ fontSize: '0.82rem', opacity: 0.7 }}>
+          <ArrowLeft size={14} />
+          Voltar ao app
         </NavLink>
 
         <div style={{ flex: 1 }} />

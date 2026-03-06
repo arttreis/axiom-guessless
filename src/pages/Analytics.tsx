@@ -29,9 +29,9 @@ export function Analytics() {
 
       <div className="metrics-grid">
         <MetricsCard label="Total de Posts"  value={data.totalPosts}      icon={FileText}    color="#3D6FF8" />
-        <MetricsCard label="Publicados"      value={data.publishedPosts}  icon={CheckCircle} color="#10B981" />
-        <MetricsCard label="Rascunhos"       value={data.draftPosts}      icon={FileEdit}    color="#F59E0B" />
-        <MetricsCard label="Agendados"       value={data.scheduledPosts}  icon={Clock}       color="#8B5CF6" />
+        <MetricsCard label="Publicados"      value={data.publishedPosts}  icon={CheckCircle} color="#3D6FF8" />
+        <MetricsCard label="Rascunhos"       value={data.draftPosts}      icon={FileEdit}    color="#6B7FFF" />
+        <MetricsCard label="Agendados"       value={data.scheduledPosts}  icon={Clock}       color="#9BA8FF" />
       </div>
 
       <div className="charts-grid">

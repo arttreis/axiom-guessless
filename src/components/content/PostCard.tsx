@@ -10,9 +10,9 @@ const PLATFORM_ICONS: Record<string, React.ReactNode> = {
 };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  published: { label: 'Publicado', color: '#10B981', bg: 'rgba(16,185,129,0.12)' },
-  draft:     { label: 'Rascunho', color: '#94A3B8', bg: 'rgba(148,163,184,0.12)' },
-  scheduled: { label: 'Agendado', color: '#8B5CF6', bg: 'rgba(139,92,246,0.12)' },
+  published: { label: 'Publicado', color: '#3D6FF8', bg: 'rgba(61,111,248,0.12)' },
+  draft:     { label: 'Rascunho', color: '#7B96C4', bg: 'rgba(123,150,196,0.10)' },
+  scheduled: { label: 'Agendado', color: '#9BA8FF', bg: 'rgba(155,168,255,0.12)' },
 };
 
 const STATUS_CYCLE: Array<'draft' | 'published' | 'scheduled'> = ['draft', 'published', 'scheduled'];

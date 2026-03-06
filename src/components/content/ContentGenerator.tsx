@@ -34,7 +34,7 @@ export function ContentGenerator({ brandContext, primaryArchetype, onGenerated }
   return (
     <div className="content-generator">
       <div className="generator-header">
-        <span className="generator-icon">✦</span>
+        <span className="generator-icon">IA</span>
         <span className="generator-title">Gerar Conteúdo com IA</span>
       </div>
 

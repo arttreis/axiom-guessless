@@ -8,19 +8,17 @@
 
 :root {
   /* ── Brand ── */
-  --brand:        #3D6FF8;   /* azul vivo, destaca no escuro */
+  --brand:        #3D6FF8;
   --brand-mid:    #6B7FFF;
   --brand-light:  #9BA8FF;
-  --brand-cyan:   #22D3EE;
-  --brand-green:  #10B981;
 
-  /* aliases retrocompatíveis */
+  /* aliases (compatibilidade) */
   --orange: #3D6FF8;
   --amber:  #6B7FFF;
   --yellow: #9BA8FF;
-  --purple: #8B5CF6;
-  --blue:   #22D3EE;
-  --green:  #10B981;
+  --purple: #6B7FFF;
+  --blue:   #3D6FF8;
+  --green:  #3D6FF8;
 
   /* ── Gradientes ── */
   --grad-main:     linear-gradient(135deg, #3D6FF8 0%, #6B7FFF 60%, #9BA8FF 100%);
@@ -84,7 +82,7 @@
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--dark);
   color: var(--text-primary);
   font-size: 15px;
@@ -98,7 +96,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
   line-height: 1.18;
   letter-spacing: -0.03em;
@@ -190,7 +188,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   padding: 0.7rem 1.4rem;
   background: var(--brand);
   color: #FFFFFF;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.01em;
@@ -218,7 +216,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   padding: 0.7rem 1.4rem;
   background: transparent;
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 500;
   font-size: 0.875rem;
   letter-spacing: 0.01em;
@@ -286,16 +284,17 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   filter: drop-shadow(0 0 16px rgba(61,111,248,0.6));
 }
 .loading-text {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.35rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   background: var(--grad-main);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: pulseGlow 2.4s ease-in-out infinite;
 }
-.loading-sub { color: var(--text-secondary); font-size: 0.9rem; }
+.loading-sub { color: var(--text-muted); font-size: 0.85rem; letter-spacing: 0.02em; }
 
 /* ============================================
    TOAST
@@ -355,7 +354,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 
 .sidebar-logo {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
   font-size: 1.625rem;
   letter-spacing: -0.05em;
@@ -433,7 +432,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   font-size: 0.8rem;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 .btn-portal:hover { border-color: var(--orange); color: var(--text-primary); }
 
@@ -464,7 +463,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   color: var(--text-muted);
   font-size: 0.75rem;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   transition: color 0.2s;
 }
 .btn-signout:hover { color: #FF6B6B; }
@@ -522,7 +521,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   text-shadow: 0 0 20px rgba(61,111,248,0.5);
 }
 .dashboard-brand-name {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(2rem, 4vw, 2.75rem);
   font-weight: 800;
   margin-bottom: 0.75rem;
@@ -601,7 +600,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 100px;
 }
 .archetype-hero-name {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(1.6rem, 3.5vw, 2.25rem);
   font-weight: 800;
   margin-bottom: 0.5rem;
@@ -615,14 +614,12 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 100px;
   font-size: 0.8rem;
 }
-.archetype-hero-score { text-align: right; flex-shrink: 0; }
-.score-value { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; line-height: 1; }
-.score-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+.archetype-hero-score { flex-shrink: 0; }
 
 /* Archetype Grid 12 */
 .archetype-section { margin-bottom: 1.5rem; }
 .section-subtitle-sm {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -720,7 +717,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 .ai-analysis-header { display: flex; align-items: center; gap: 0.625rem; margin-bottom: 0.875rem; }
 .ai-analysis-icon { color: var(--brand); font-size: 1rem; }
-.ai-analysis-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em; }
+.ai-analysis-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.02em; }
 .ai-analysis-text { color: var(--text-secondary); line-height: 1.78; font-size: 0.95rem; }
 
 /* ============================================
@@ -822,7 +819,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   opacity: 0;
 }
 .hero-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(2.5rem, 7vw, 5.5rem);
   font-weight: 800;
   line-height: 1.08;
@@ -865,7 +862,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 .hero-stat { display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
 .hero-stat-value {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
   font-size: 1rem;
   color: var(--text-primary);
@@ -889,7 +886,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   opacity: 0.85;
 }
 .section-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 800;
   line-height: 1.2;
@@ -917,7 +914,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 .feature-card:hover { border-color: rgba(61,111,248,0.4); transform: translateY(-3px); box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(61,111,248,0.2); }
 .feature-icon { font-size: 1.75rem; margin-bottom: 1rem; color: var(--orange); }
-.feature-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem; }
+.feature-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.5rem; }
 .feature-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
 
 /* Archetypes Preview */
@@ -990,10 +987,10 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   white-space: nowrap;
 }
 .pricing-header { margin-bottom: 1.5rem; }
-.pricing-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem; margin-bottom: 0.25rem; }
+.pricing-name { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.25rem; margin-bottom: 0.25rem; }
 .pricing-plan-desc { font-size: 0.83rem; color: var(--text-muted); margin-bottom: 0.875rem; line-height: 1.4; }
 .pricing-price { display: flex; align-items: baseline; gap: 0.25rem; }
-.price-value { font-family: 'Syne', sans-serif; font-size: 2.25rem; font-weight: 800; color: var(--text-primary); }
+.price-value { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.25rem; font-weight: 800; color: var(--text-primary); }
 .price-period { color: var(--text-muted); font-size: 0.9rem; }
 .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 0.625rem; margin-bottom: 1.75rem; }
 .pricing-feature { font-size: 0.9rem; color: var(--text-secondary); }
@@ -1023,7 +1020,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   align-items: center;
   gap: 1.5rem;
 }
-.cta-final-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.15; }
+.cta-final-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.15; }
 .cta-final-subtitle { color: var(--text-secondary); font-size: 1.05rem; }
 .cta-final-note { color: var(--text-muted); font-size: 0.85rem; }
 
@@ -1070,7 +1067,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 .checkout-header { text-align: center; }
 .checkout-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(1.9rem, 4vw, 2.25rem);
   font-weight: 800;
   margin-bottom: 0.5rem;
@@ -1095,7 +1092,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 12px;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 .plan-btn:hover { border-color: rgba(49,26,254,0.4); }
 .plan-btn--active {
@@ -1116,7 +1113,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border: 1px solid var(--card-border);
   border-radius: 8px;
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 400;
   transition: border-color 0.15s, box-shadow 0.15s;
@@ -1157,7 +1154,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border: none;
   border-radius: 9px;
   color: var(--text-muted);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -1185,7 +1182,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 .onboarding-container { width: 100%; max-width: 680px; display: flex; flex-direction: column; gap: 2rem; }
 .onboarding-logo {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 800;
   font-size: 1.5rem;
   background: var(--grad-main);
@@ -1238,7 +1235,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   font-size: 1.1rem;
   flex-shrink: 0;
 }
-.block-category { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; }
+.block-category { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1.05rem; }
 
 .questions-list { display: flex; flex-direction: column; gap: 1.25rem; }
 .question-item { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -1252,7 +1249,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border: 1px solid var(--card-border);
   border-radius: 10px;
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.9rem;
   resize: vertical;
   transition: border-color 0.2s;
@@ -1270,7 +1267,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 .content-page { padding: 2rem 2rem 3rem; max-width: 1100px; margin: 0 auto; }
 .content-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
 .content-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(1.75rem, 3.5vw, 2.25rem);
   font-weight: 800;
   letter-spacing: -0.035em;
@@ -1308,7 +1305,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border: 1px solid var(--card-border);
   border-radius: 10px;
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.9rem;
   resize: vertical;
   transition: border-color 0.2s;
@@ -1323,7 +1320,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border: 1px solid var(--card-border);
   border-radius: 10px;
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.875rem;
   outline: none;
   cursor: pointer;
@@ -1344,7 +1341,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 12px;
   text-align: center;
 }
-.stat-value { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; margin-bottom: 0.25rem; }
+.stat-value { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; margin-bottom: 0.25rem; }
 .stat-label { font-size: 0.8rem; color: var(--text-muted); }
 
 /* Post Filter */
@@ -1357,7 +1354,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   color: var(--text-secondary);
   font-size: 0.85rem;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   transition: all 0.2s;
 }
 .filter-chip:hover { border-color: rgba(49,26,254,0.4); color: var(--text-primary); }
@@ -1383,7 +1380,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   gap: 1rem;
 }
 .empty-icon { font-size: 2rem; color: var(--text-muted); }
-.empty-title { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-secondary); letter-spacing: -0.02em; }
+.empty-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--text-secondary); letter-spacing: -0.02em; }
 .empty-sub { font-size: 0.9rem; max-width: 340px; color: var(--text-muted); line-height: 1.6; }
 
 /* Post Card */
@@ -1453,7 +1450,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 .post-delete-btn:hover { color: #FF6B6B; background: rgba(255,107,107,0.12); }
 .post-card-body { flex: 1; }
 .post-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.35;
@@ -1574,7 +1571,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 .metrics-card:hover { border-color: rgba(61,111,248,0.35); transform: translateY(-2px); box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(61,111,248,0.15); }
 .metrics-card-icon { font-size: 1.5rem; color: var(--orange); flex-shrink: 0; }
 .metrics-card-value {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 2rem;
   font-weight: 800;
   line-height: 1;
@@ -1596,7 +1593,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 14px;
 }
 .chart-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
   font-size: 1rem;
   margin-bottom: 1.25rem;
@@ -1681,11 +1678,11 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   gap: 1rem;
 }
 .account-form { display: flex; flex-direction: column; gap: 1rem; }
-.account-section-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+.account-section-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
 .form-field { display: flex; flex-direction: column; gap: 0.375rem; }
 .form-error { font-size: 0.82rem; color: #FF6B6B; }
 .plan-info-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-.plan-name-large { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800; text-transform: capitalize; }
+.plan-name-large { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem; font-weight: 800; text-transform: capitalize; }
 .plan-trial-info { font-size: 0.85rem; color: var(--amber); }
 .detail-value { font-size: 0.9rem; color: var(--text-secondary); }
 
@@ -1712,7 +1709,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 100px;
   color: var(--text-secondary);
   font-size: 0.85rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -1761,7 +1758,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 8px;
   color: var(--text-secondary);
   font-size: 0.8rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
 }
@@ -1958,7 +1955,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 .topbar-left { display: flex; align-items: center; gap: 0.75rem; }
 .topbar-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -1975,7 +1972,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 8px;
   color: var(--text-muted);
   font-size: 0.78rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s;
 }
@@ -1986,7 +1983,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 4px;
   padding: 0.1rem 0.35rem;
   font-size: 0.72rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 .topbar-avatar {
   width: 32px;
@@ -2041,7 +2038,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border: none;
   outline: none;
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.925rem;
   font-weight: 500;
 }
@@ -2067,7 +2064,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border: none;
   border-radius: 8px;
   color: var(--text-secondary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
@@ -2086,7 +2083,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 4px;
   padding: 0.1rem 0.35rem;
   font-size: 0.72rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   color: var(--text-muted);
 }
 .cmd-empty { padding: 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.875rem; }
@@ -2103,7 +2100,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border: 1px solid var(--card-border);
   border-radius: 3px;
   padding: 0.05rem 0.3rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   margin-right: 0.25rem;
 }
 
@@ -2174,14 +2171,15 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
    ============================================ */
 .score-ring {
   position: relative;
-  width: 96px;
-  height: 96px;
+  width: 108px;
+  height: 108px;
   flex-shrink: 0;
 }
 .score-svg {
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
+  display: block;
 }
 .score-inner {
   position: absolute;
@@ -2190,16 +2188,25 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
+  text-align: center;
+  line-height: 1;
+  gap: 3px;
 }
 .score-value {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.4rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.6rem;
   font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
 }
-.score-label { font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.05em; }
+.score-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 
 /* ============================================
    METRICS CARD ATUALIZADO

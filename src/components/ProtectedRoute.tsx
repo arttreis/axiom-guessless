@@ -11,8 +11,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   if (isLoading) {
     return (
       <div className="loading-screen">
-        <div className="loading-icon animate-float">✦</div>
-        <p className="loading-text">Carregando...</p>
+        <p className="loading-text">AXIOM</p>
       </div>
     );
   }
