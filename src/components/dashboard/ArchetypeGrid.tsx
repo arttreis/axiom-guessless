@@ -33,7 +33,9 @@ export function ArchetypeGrid({ result }: ArchetypeGridProps) {
               <div className="arch-name">{arch.name}</div>
               {isSecondary && <div className="arch-secondary-badge">2º</div>}
 
-              {/* Barra de progresso */}
+              <div className="arch-spacer" />
+
+              {/* Barra de progresso sempre no fundo */}
               <div className="arch-progress-track">
                 <div
                   className="arch-progress-fill"

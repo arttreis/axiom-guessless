@@ -35,7 +35,6 @@ export function Dashboard() {
     <div className="dashboard-content animate-fade-up">
       {/* Header */}
       <div className="dashboard-header">
-        <div className="dashboard-label">RELATÓRIO DE MARCA</div>
         <h1 className="dashboard-brand-name">{brandName}</h1>
         {keywords && (
           <div className="dashboard-keywords">
