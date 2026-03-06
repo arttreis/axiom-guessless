@@ -30,10 +30,9 @@ export function Sidebar() {
 
       {showTrialBanner && (
         <div className="trial-banner">
-          <span className="trial-icon">⏱</span>
           <div>
             <div className="trial-days">{trialDaysLeft}d restantes</div>
-            <div className="trial-sub">período gratuito</div>
+            <div className="trial-sub">período de trial</div>
           </div>
         </div>
       )}
@@ -69,8 +68,8 @@ export function Sidebar() {
           <span
             className="plan-badge"
             style={{
-              backgroundColor: profile?.subscription_status === 'active' ? '#10B98120' : '#F59E0B20',
-              color: profile?.subscription_status === 'active' ? '#10B981' : '#F59E0B',
+              backgroundColor: 'rgba(61,111,248,0.15)',
+              color: '#9BA8FF',
             }}
           >
             {profile?.subscription_status === 'active' ? 'Ativo' : 'Trial'}
