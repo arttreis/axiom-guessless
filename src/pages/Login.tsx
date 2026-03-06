@@ -87,8 +87,8 @@ export function Login() {
   if (isLoading) {
     return (
       <div className="loading-screen">
-        <div className="loading-icon animate-float">✦</div>
-        <p className="loading-text">Carregando...</p>
+        <div className="loading-icon animate-pulse">✦</div>
+        <p className="loading-text">Axiom</p>
       </div>
     );
   }

@@ -18,8 +18,9 @@ export function Dashboard() {
   if (loading) {
     return (
       <div className="loading-screen">
-        <div className="loading-icon animate-float">✦</div>
-        <p className="loading-text">Carregando relatório...</p>
+        <div className="loading-icon animate-pulse">✦</div>
+        <p className="loading-text">Axiom</p>
+        <p className="loading-sub">Carregando seu relatório...</p>
       </div>
     );
   }

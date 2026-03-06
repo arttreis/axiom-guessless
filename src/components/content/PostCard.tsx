@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Instagram, Linkedin, Twitter, Youtube, Trash2, ChevronRight, Hash, Lightbulb } from 'lucide-react';
+import { Instagram, Linkedin, Twitter, Youtube, Trash2, ChevronRight, Hash, Lightbulb, Heart } from 'lucide-react';
 import type { Post } from '../../types';
 
 const PLATFORM_ICONS: Record<string, React.ReactNode> = {
@@ -130,7 +130,7 @@ export function PostCard({ post, listView, onDelete, onStatusChange }: PostCardP
           {post.archetype && <span className="post-archetype">· {post.archetype}</span>}
         </div>
         <div className="post-footer-right">
-          <span className="post-likes">♡ {post.likes}</span>
+          <span className="post-likes"><Heart size={11} /> {post.likes}</span>
           <span className="post-engagement">{post.engagement}</span>
         </div>
       </div>
