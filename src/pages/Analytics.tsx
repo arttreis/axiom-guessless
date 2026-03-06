@@ -1,3 +1,4 @@
+import { FileText, CheckCircle, FileEdit, Clock } from 'lucide-react';
 import { useAnalytics } from '../hooks/useAnalytics';
 import { MetricsCard } from '../components/analytics/MetricsCard';
 import { PlatformBreakdown } from '../components/analytics/PlatformBreakdown';
@@ -8,9 +9,11 @@ export function Analytics() {
 
   if (loading) {
     return (
-      <div className="loading-screen">
-        <div className="loading-icon animate-float">✦</div>
-        <p className="loading-text">Carregando analytics...</p>
+      <div className="dashboard-content animate-fade-up">
+        <div className="skeleton-header" />
+        <div className="metrics-grid">
+          {[1,2,3,4].map(i => <div key={i} className="skeleton-card" />)}
+        </div>
       </div>
     );
   }
@@ -25,10 +28,10 @@ export function Analytics() {
       </div>
 
       <div className="metrics-grid">
-        <MetricsCard label="Total de Posts" value={data.totalPosts} icon="◈" />
-        <MetricsCard label="Publicados" value={data.publishedPosts} icon="★" />
-        <MetricsCard label="Rascunhos" value={data.draftPosts} icon="✦" />
-        <MetricsCard label="Agendados" value={data.scheduledPosts} icon="⏱" />
+        <MetricsCard label="Total de Posts"  value={data.totalPosts}      icon={FileText}    color="#3D6FF8" />
+        <MetricsCard label="Publicados"      value={data.publishedPosts}  icon={CheckCircle} color="#10B981" />
+        <MetricsCard label="Rascunhos"       value={data.draftPosts}      icon={FileEdit}    color="#F59E0B" />
+        <MetricsCard label="Agendados"       value={data.scheduledPosts}  icon={Clock}       color="#8B5CF6" />
       </div>
 
       <div className="charts-grid">

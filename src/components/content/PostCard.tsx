@@ -1,104 +1,120 @@
 import { useState } from 'react';
+import { Instagram, Linkedin, Twitter, Youtube, Trash2, ChevronRight, Hash, Lightbulb } from 'lucide-react';
 import type { Post } from '../../types';
 
-const PLATFORM_EMOJIS: Record<string, string> = {
-  Instagram: '📸',
-  LinkedIn: '💼',
-  'Twitter/X': '𝕏',
-  YouTube: '▶',
+const PLATFORM_ICONS: Record<string, React.ReactNode> = {
+  Instagram: <Instagram size={13} />,
+  LinkedIn:  <Linkedin  size={13} />,
+  'Twitter/X': <Twitter size={13} />,
+  YouTube:   <Youtube  size={13} />,
 };
 
-const STATUS_COLORS: Record<string, string> = {
-  published: '#1A936F',
-  draft: '#A0A0B0',
-  scheduled: '#4D96FF',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  published: 'Publicado',
-  draft: 'Rascunho',
-  scheduled: 'Agendado',
+const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
+  published: { label: 'Publicado', color: '#10B981', bg: 'rgba(16,185,129,0.12)' },
+  draft:     { label: 'Rascunho', color: '#94A3B8', bg: 'rgba(148,163,184,0.12)' },
+  scheduled: { label: 'Agendado', color: '#8B5CF6', bg: 'rgba(139,92,246,0.12)' },
 };
 
 const STATUS_CYCLE: Array<'draft' | 'published' | 'scheduled'> = ['draft', 'published', 'scheduled'];
 
 interface PostCardProps {
   post: Post;
-  onDelete?: (postId: string) => void;
-  onStatusChange?: (postId: string, status: 'draft' | 'published' | 'scheduled') => void;
+  listView?: boolean;
+  onDelete?: (id: string) => void;
+  onStatusChange?: (id: string, status: 'draft' | 'published' | 'scheduled') => void;
 }
 
-export function PostCard({ post, onDelete, onStatusChange }: PostCardProps) {
+export function PostCard({ post, listView, onDelete, onStatusChange }: PostCardProps) {
   const [expanded, setExpanded] = useState(false);
-  const statusColor = STATUS_COLORS[post.status] ?? '#A0A0B0';
+  const cfg = STATUS_CONFIG[post.status] ?? STATUS_CONFIG.draft;
 
-  const handleStatusClick = (e: React.MouseEvent) => {
+  const handleStatus = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!onStatusChange) return;
-    const currentIndex = STATUS_CYCLE.indexOf(post.status as 'draft' | 'published' | 'scheduled');
-    const nextStatus = STATUS_CYCLE[(currentIndex + 1) % STATUS_CYCLE.length];
-    onStatusChange(post.id, nextStatus);
+    const i = STATUS_CYCLE.indexOf(post.status as 'draft' | 'published' | 'scheduled');
+    onStatusChange(post.id, STATUS_CYCLE[(i + 1) % STATUS_CYCLE.length]);
   };
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onDelete) onDelete(post.id);
+    onDelete?.(post.id);
   };
+
+  if (listView) {
+    return (
+      <div className={`post-list-row${expanded ? ' post-list-row--expanded' : ''}`} onClick={() => setExpanded(v => !v)}>
+        <div className="post-list-main">
+          <span className="post-platform-icon">{PLATFORM_ICONS[post.platform] ?? null}</span>
+          <div className="post-list-body">
+            <span className="post-list-title">{post.title}</span>
+            {expanded && <p className="post-list-content">{post.content}</p>}
+          </div>
+          <span
+            className="post-status-badge post-status-badge--clickable"
+            style={{ color: cfg.color, background: cfg.bg, borderColor: `${cfg.color}33` }}
+            onClick={handleStatus}
+          >
+            {cfg.label}
+          </span>
+          <button className="post-delete-btn" onClick={handleDelete} title="Excluir">
+            <Trash2 size={13} />
+          </button>
+          <ChevronRight size={15} className={`post-list-chevron${expanded ? ' post-list-chevron--open' : ''}`} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
       className={`post-card post-card--clickable${expanded ? ' post-card--expanded' : ''}`}
-      onClick={() => setExpanded((v) => !v)}
+      onClick={() => setExpanded(v => !v)}
     >
-      {/* Topo */}
       <div className="post-card-top">
         <div className="post-platform">
-          <span>{PLATFORM_EMOJIS[post.platform] ?? '📄'}</span>
+          <span className="post-platform-icon">{PLATFORM_ICONS[post.platform] ?? null}</span>
           <span className="post-platform-name">{post.platform}</span>
           <span className="post-type">{post.type}</span>
         </div>
         <div className="post-card-top-right">
-          <div
+          <span
             className="post-status-badge post-status-badge--clickable"
-            style={{ color: statusColor, background: `${statusColor}22`, borderColor: `${statusColor}44` }}
-            onClick={handleStatusClick}
-            title="Clique para alterar status"
+            style={{ color: cfg.color, background: cfg.bg, borderColor: `${cfg.color}33` }}
+            onClick={handleStatus}
+            title="Clique para mudar status"
           >
-            {STATUS_LABELS[post.status] ?? post.status}
-          </div>
-          <button
-            className="post-delete-btn"
-            onClick={handleDelete}
-            title="Excluir post"
-            type="button"
-          >
-            ✕
-          </button>
-          <span className={`post-expand-icon${expanded ? ' post-expand-icon--open' : ''}`}>
-            ›
+            {cfg.label}
           </span>
+          <button className="post-delete-btn" onClick={handleDelete} title="Excluir">
+            <Trash2 size={13} />
+          </button>
+          <ChevronRight
+            size={15}
+            className={`post-expand-icon${expanded ? ' post-expand-icon--open' : ''}`}
+            style={{ transition: 'transform 0.2s', transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
+          />
         </div>
       </div>
 
-      {/* Corpo */}
       <div className="post-card-body">
         <h4 className="post-title">{post.title}</h4>
         <p className={`post-content-preview${expanded ? ' post-content-preview--expanded' : ''}`}>
           {post.content}
         </p>
-
         {expanded && (
           <div className="post-expanded-details">
             {post.hashtags && post.hashtags.length > 0 && (
               <div className="post-hashtags">
-                {post.hashtags.map((tag) => (
-                  <span key={tag} className="post-hashtag">{tag}</span>
+                {post.hashtags.map(tag => (
+                  <span key={tag} className="post-hashtag">
+                    <Hash size={10} />{tag.replace('#', '')}
+                  </span>
                 ))}
               </div>
             )}
             {post.tip && (
               <div className="post-tip">
-                <span className="post-tip-icon">💡</span>
+                <Lightbulb size={14} className="post-tip-icon" />
                 <span>{post.tip}</span>
               </div>
             )}
@@ -106,15 +122,12 @@ export function PostCard({ post, onDelete, onStatusChange }: PostCardProps) {
         )}
       </div>
 
-      {/* Rodapé */}
       <div className="post-card-footer">
         <div className="post-footer-left">
           <span className="post-date">
             {new Date(post.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })}
           </span>
-          {post.archetype && (
-            <span className="post-archetype">· {post.archetype}</span>
-          )}
+          {post.archetype && <span className="post-archetype">· {post.archetype}</span>}
         </div>
         <div className="post-footer-right">
           <span className="post-likes">♡ {post.likes}</span>

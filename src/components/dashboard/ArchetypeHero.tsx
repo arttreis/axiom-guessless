@@ -9,18 +9,22 @@ export function ArchetypeHero({ result }: ArchetypeHeroProps) {
   const arch = getArchetype(result.primary_archetype);
   if (!arch) return null;
 
+  const score = result.scores[result.primary_archetype] ?? 0;
+
   return (
     <div
       className="archetype-hero-card"
       style={{
-        background: `linear-gradient(135deg, ${arch.color}18 0%, ${arch.color}08 100%)`,
-        borderColor: `${arch.color}66`,
+        background: `linear-gradient(135deg, ${arch.color}14 0%, ${arch.color}06 100%)`,
+        borderColor: `${arch.color}55`,
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
       }}
     >
-      {/* Blob decorativo */}
+      {/* Glow blob */}
       <div
         className="archetype-hero-blob"
-        style={{ background: `radial-gradient(circle, ${arch.color}33 0%, transparent 70%)` }}
+        style={{ background: `radial-gradient(circle, ${arch.color}40 0%, transparent 65%)` }}
       />
 
       <div className="archetype-hero-content">
@@ -31,6 +35,7 @@ export function ArchetypeHero({ result }: ArchetypeHeroProps) {
             background: `${arch.color}22`,
             borderColor: `${arch.color}44`,
             color: arch.color,
+            boxShadow: `0 0 24px ${arch.color}30`,
           }}
         >
           {arch.icon}
@@ -38,14 +43,13 @@ export function ArchetypeHero({ result }: ArchetypeHeroProps) {
 
         {/* Info */}
         <div className="archetype-hero-info">
-          <div className="archetype-hero-badge">Seu Arquétipo Principal</div>
+          <div className="archetype-hero-badge">Arquétipo Principal</div>
           <h2 className="archetype-hero-name" style={{ color: arch.color }}>
             {result.primary_archetype}
           </h2>
           <p className="archetype-hero-desc">{arch.desc}</p>
-
           <div className="archetype-hero-tags">
-            {['Conteúdo autêntico', 'Comunicação estratégica', 'Posicionamento único'].map((tag) => (
+            {['Conteúdo autêntico', 'Comunicação estratégica', 'Posicionamento único'].map(tag => (
               <span
                 key={tag}
                 className="archetype-tag"
@@ -59,10 +63,25 @@ export function ArchetypeHero({ result }: ArchetypeHeroProps) {
 
         {/* Score */}
         <div className="archetype-hero-score">
-          <div className="score-value" style={{ color: arch.color }}>
-            {result.scores[result.primary_archetype] ?? 0}%
+          <div className="score-ring" style={{ '--score-color': arch.color } as React.CSSProperties}>
+            <svg viewBox="0 0 64 64" className="score-svg">
+              <circle cx="32" cy="32" r="28" fill="none" stroke={`${arch.color}22`} strokeWidth="5" />
+              <circle
+                cx="32" cy="32" r="28"
+                fill="none"
+                stroke={arch.color}
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeDasharray={`${2 * Math.PI * 28 * score / 100} ${2 * Math.PI * 28}`}
+                strokeDashoffset={2 * Math.PI * 28 * 0.25}
+                style={{ filter: `drop-shadow(0 0 6px ${arch.color}88)` }}
+              />
+            </svg>
+            <div className="score-inner">
+              <div className="score-value" style={{ color: arch.color }}>{score}%</div>
+              <div className="score-label">Afinidade</div>
+            </div>
           </div>
-          <div className="score-label">Afinidade</div>
         </div>
       </div>
     </div>

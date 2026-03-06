@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
+import { CommandPalette } from './components/CommandPalette';
 import { Login } from './pages/Login';
 import { Landing } from './pages/Landing';
 import { Checkout } from './pages/Checkout';
@@ -19,6 +21,18 @@ import { ToastContainer } from './components/Toast';
 
 function AppRoutes() {
   useAuth();
+  const [cmdOpen, setCmdOpen] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setCmdOpen(v => !v);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   return (
     <>
@@ -68,6 +82,7 @@ function AppRoutes() {
       </Routes>
 
       <ToastContainer />
+      <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
     </>
   );
 }
