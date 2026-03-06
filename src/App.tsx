@@ -6,8 +6,15 @@ import { Checkout } from './pages/Checkout';
 import { Onboarding } from './pages/Onboarding';
 import { Dashboard } from './pages/Dashboard';
 import { Content } from './pages/Content';
+import { Analytics } from './pages/Analytics';
+import { Account } from './pages/Account';
+import { AdminOverview } from './pages/admin/AdminOverview';
+import { AdminUsers } from './pages/admin/AdminUsers';
+import { AdminUserDetail } from './pages/admin/AdminUserDetail';
 import { DashboardLayout } from './components/layout/DashboardLayout';
+import { AdminLayout } from './components/layout/AdminLayout';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { AdminGuard } from './guards/AdminGuard';
 import { ToastContainer } from './components/Toast';
 
 function AppRoutes() {
@@ -39,6 +46,22 @@ function AppRoutes() {
         >
           <Route index element={<Dashboard />} />
           <Route path="content" element={<Content />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="account" element={<Account />} />
+        </Route>
+
+        <Route
+          path="/admin"
+          element={
+            <AdminGuard>
+              <AdminLayout />
+            </AdminGuard>
+          }
+        >
+          <Route index element={<Navigate to="/admin/overview" replace />} />
+          <Route path="overview" element={<AdminOverview />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="users/:id" element={<AdminUserDetail />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

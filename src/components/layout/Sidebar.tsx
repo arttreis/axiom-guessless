@@ -55,6 +55,29 @@ export function Sidebar() {
           <span className="sidebar-icon">✦</span>
           Conteúdo
         </NavLink>
+        <NavLink
+          to="/dashboard/analytics"
+          className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+        >
+          <span className="sidebar-icon">★</span>
+          Analytics
+        </NavLink>
+        <NavLink
+          to="/dashboard/account"
+          className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+        >
+          <span className="sidebar-icon">⬡</span>
+          Minha Conta
+        </NavLink>
+        {profile?.role === 'admin' && (
+          <NavLink
+            to="/admin/overview"
+            className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+          >
+            <span className="sidebar-icon">⚙</span>
+            Admin
+          </NavLink>
+        )}
       </nav>
 
       <div className="sidebar-divider" />
