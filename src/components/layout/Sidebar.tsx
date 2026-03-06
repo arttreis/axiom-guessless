@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import { ThemeToggle } from '../ThemeToggle';
 
 export function Sidebar() {
   const { profile, signOut } = useAuthStore();
@@ -114,9 +115,12 @@ export function Sidebar() {
             <div className="user-email">{profile?.email ?? ''}</div>
           </div>
         </div>
-        <button className="btn-signout" onClick={handleSignOut}>
-          Sair
-        </button>
+        <div className="sidebar-bottom-row">
+          <button className="btn-signout" onClick={handleSignOut}>
+            Sair
+          </button>
+          <ThemeToggle />
+        </div>
       </div>
     </aside>
   );
