@@ -65,16 +65,16 @@ export function ArchetypeHero({ result }: ArchetypeHeroProps) {
         <div className="archetype-hero-score">
           <div className="score-ring" style={{ '--score-color': arch.color } as React.CSSProperties}>
             <svg viewBox="0 0 64 64" className="score-svg">
-              <circle cx="32" cy="32" r="26" fill="none" stroke={`${arch.color}28`} strokeWidth="6" />
+              <circle cx="32" cy="32" r="25" fill="none" stroke={`${arch.color}22`} strokeWidth="7" />
               <circle
-                cx="32" cy="32" r="26"
+                cx="32" cy="32" r="25"
                 fill="none"
                 stroke={arch.color}
-                strokeWidth="6"
+                strokeWidth="7"
                 strokeLinecap="round"
-                strokeDasharray={`${2 * Math.PI * 26 * score / 100} ${2 * Math.PI * 26}`}
-                strokeDashoffset={2 * Math.PI * 26 * 0.25}
-                style={{ filter: `drop-shadow(0 0 8px ${arch.color}99)` }}
+                strokeDasharray={`${2 * Math.PI * 25 * score / 100} ${2 * Math.PI * 25}`}
+                strokeDashoffset={2 * Math.PI * 25 * 0.25}
+                style={{ filter: `drop-shadow(0 0 10px ${arch.color}BB)` }}
               />
             </svg>
             <div className="score-inner">

@@ -8,28 +8,28 @@
 
 :root {
   /* ── Brand ── */
-  --brand:        #3D6FF8;
-  --brand-mid:    #6B7FFF;
-  --brand-light:  #9BA8FF;
+  --brand:        #4070FF;
+  --brand-mid:    #6B8AFF;
+  --brand-light:  #9DB0FF;
 
   /* aliases (compatibilidade) */
-  --orange: #3D6FF8;
-  --amber:  #6B7FFF;
-  --yellow: #9BA8FF;
-  --purple: #6B7FFF;
-  --blue:   #3D6FF8;
-  --green:  #3D6FF8;
+  --orange: #4070FF;
+  --amber:  #6B8AFF;
+  --yellow: #9DB0FF;
+  --purple: #6B8AFF;
+  --blue:   #4070FF;
+  --green:  #4070FF;
 
   /* ── Gradientes ── */
-  --grad-main:     linear-gradient(135deg, #3D6FF8 0%, #6B7FFF 60%, #9BA8FF 100%);
-  --grad-spectrum: linear-gradient(135deg, #3D6FF8 0%, #8B5CF6 50%, #22D3EE 100%);
+  --grad-main:     linear-gradient(135deg, #4070FF 0%, #6B8AFF 60%, #9DB0FF 100%);
+  --grad-spectrum: linear-gradient(135deg, #4070FF 0%, #6B8AFF 50%, #9DB0FF 100%);
   --grad-glow:     radial-gradient(ellipse at top, rgba(61,111,248,0.18) 0%, transparent 65%);
 
   /* ── Superfícies dark (mais profundas) ── */
-  --dark:   #01080F;   /* preto azulado profundo */
-  --dark-2: #050F1C;   /* sidebar / nav */
-  --dark-3: #0A1628;   /* cards */
-  --dark-4: #0F2040;   /* inputs / sub-cards */
+  --dark:   #00060E;   /* preto azulado profundo */
+  --dark-2: #040D1A;   /* sidebar / nav */
+  --dark-3: #081422;   /* cards */
+  --dark-4: #0C1C38;   /* inputs / sub-cards */
 
   /* ── Tokens semânticos ── */
   --card-border:        rgba(61,111,248,0.18);
@@ -46,7 +46,7 @@
   --shadow-sm:         0 1px 4px rgba(0,0,0,0.6);
   --shadow-md:         0 4px 24px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.35);
   --shadow-lg:         0 12px 48px rgba(0,0,0,0.65), 0 4px 16px rgba(0,0,0,0.4);
-  --shadow-orange:     0 0 0 1px rgba(61,111,248,0.3), 0 8px 32px rgba(61,111,248,0.45);
+  --shadow-orange:     0 0 0 1px rgba(64,112,255,0.35), 0 8px 32px rgba(64,112,255,0.5);
   --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(61,111,248,0.2);
 
   --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
@@ -332,8 +332,8 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   min-height: 100vh;
   background: var(--dark);
   background-image:
-    radial-gradient(ellipse 70% 45% at 60% -5%, rgba(61,111,248,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 35% at 10% 80%, rgba(61,111,248,0.05) 0%, transparent 55%);
+    radial-gradient(ellipse 70% 50% at 65% -5%, rgba(64,112,255,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 5% 85%, rgba(64,112,255,0.07) 0%, transparent 55%);
 }
 .sidebar-container {
   width: 240px;
@@ -406,9 +406,9 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 .sidebar-link.active {
   color: #FFFFFF;
-  background: linear-gradient(135deg, rgba(61,111,248,0.28) 0%, rgba(107,127,255,0.18) 100%);
+  background: linear-gradient(135deg, rgba(64,112,255,0.32) 0%, rgba(107,138,255,0.20) 100%);
   font-weight: 600;
-  box-shadow: 0 0 0 1px rgba(61,111,248,0.22), 0 2px 8px rgba(61,111,248,0.15);
+  box-shadow: 0 0 0 1px rgba(64,112,255,0.28), 0 2px 12px rgba(64,112,255,0.2);
 }
 .sidebar-icon { font-size: 0.875rem; opacity: 0.85; }
 .sidebar-divider { border-top: 1px solid var(--card-border); margin: 0.5rem 0; }
@@ -507,12 +507,12 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
    DASHBOARD CONTENT
    ============================================ */
 .dashboard-content {
-  padding: 2.25rem 2.5rem 4rem;
-  max-width: 1080px;
+  padding: 2rem 2.5rem 3rem;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
 }
-.dashboard-header { margin-bottom: 2rem; }
+.dashboard-header { margin-bottom: 1.5rem; }
 .dashboard-label {
   font-size: 0.72rem;
   font-weight: 700;
@@ -524,10 +524,10 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 .dashboard-brand-name {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-size: clamp(2.25rem, 4.5vw, 3.25rem);
   font-weight: 800;
   margin-bottom: 0.75rem;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.045em;
 }
 .dashboard-keywords { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .keyword-tag {
@@ -553,8 +553,8 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   position: relative;
   border: 1px solid;
   border-radius: 20px;
-  padding: 2rem 2.25rem;
-  margin-bottom: 2rem;
+  padding: 2.25rem 2.5rem;
+  margin-bottom: 1.75rem;
   overflow: hidden;
   box-shadow: var(--shadow-lg);
 }
@@ -619,7 +619,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 .archetype-hero-score { flex-shrink: 0; }
 
 /* Archetype Grid 12 */
-.archetype-section { margin-bottom: 1.5rem; }
+.archetype-section { margin-bottom: 1.75rem; }
 .section-subtitle-sm {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 1.2rem;
@@ -2183,8 +2183,8 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
    ============================================ */
 .score-ring {
   position: relative;
-  width: 128px;
-  height: 128px;
+  width: 160px;
+  height: 160px;
   flex-shrink: 0;
 }
 .score-svg {
@@ -2201,21 +2201,21 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 4px;
+  gap: 5px;
 }
 .score-value {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
 }
 .score-label {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.62rem;
+  font-size: 0.65rem;
   font-weight: 700;
   color: var(--text-secondary);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
