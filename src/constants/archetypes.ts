@@ -6,18 +6,18 @@ export interface Archetype {
 }
 
 export const ARCHETYPES: Archetype[] = [
-  { name: 'O Inocente',    color: '#8BA8FF', icon: '☀',  desc: 'Otimista, puro, nostálgico. Busca felicidade e harmonia.' },
-  { name: 'O Explorador',  color: '#6B8FFF', icon: '⛰',  desc: 'Aventureiro, livre, autêntico. Descobre o novo.' },
-  { name: 'O Sábio',       color: '#3D6FF8', icon: '◈',  desc: 'Inteligente, analítico, mentor. Compartilha conhecimento.' },
-  { name: 'O Herói',       color: '#2B5EE8', icon: '⚡',  desc: 'Corajoso, determinado, inspirador. Supera desafios.' },
-  { name: 'O Fora-da-Lei', color: '#4B7BFF', icon: '✦',  desc: 'Rebelde, disruptivo, iconoclasta. Quebra regras.' },
-  { name: 'O Mago',        color: '#6B7FFF', icon: '✧',  desc: 'Visionário, transformador, carismático. Realiza sonhos.' },
-  { name: 'O Cara Comum',  color: '#7B96C4', icon: '◉',  desc: 'Empático, confiável, real. Pertence ao grupo.' },
-  { name: 'O Amante',      color: '#9BA8FF', icon: '♡',  desc: 'Apaixonado, sensual, comprometido. Cria conexões profundas.' },
-  { name: 'O Bobo',        color: '#5B7FE8', icon: '★',  desc: 'Divertido, irreverente, espontâneo. Traz leveza.' },
-  { name: 'O Cuidador',    color: '#4A70D8', icon: '❋',  desc: 'Generoso, protetor, empático. Serve ao próximo.' },
-  { name: 'O Criador',     color: '#5578F0', icon: '◬',  desc: 'Inovador, artístico, visionário. Constrói coisas novas.' },
-  { name: 'O Governante',  color: '#3050D0', icon: '♛',  desc: 'Líder, responsável, controlador. Cria ordem e estabilidade.' },
+  { name: 'O Inocente',    color: '#4070FF', icon: '☀',  desc: 'Otimista, puro e nostálgico. Acredita no bem e busca felicidade genuína. Marcas com esse arquétipo transmitem simplicidade, honestidade e esperança — criando uma sensação de segurança e pertencimento.' },
+  { name: 'O Explorador',  color: '#4070FF', icon: '⛰',  desc: 'Aventureiro, livre e autêntico. Desafia o convencional em busca de novas experiências. Marcas exploradoras inspiram independência, descoberta e a coragem de sair da zona de conforto.' },
+  { name: 'O Sábio',       color: '#4070FF', icon: '◈',  desc: 'Inteligente, analítico e mentor. Compartilha conhecimento com profundidade e clareza. Marcas sábias são referências de credibilidade — educam, orientam e empoderam seu público.' },
+  { name: 'O Herói',       color: '#4070FF', icon: '⚡',  desc: 'Corajoso, determinado e inspirador. Enfrenta desafios e supera obstáculos. Marcas heroicas motivam ação, celebram conquistas e constroem uma narrativa de superação e excelência.' },
+  { name: 'O Fora-da-Lei', color: '#4070FF', icon: '✦',  desc: 'Rebelde, disruptivo e iconoclasta. Quebra regras e questiona o status quo. Marcas fora-da-lei provocam, desafiam convenções e falam para quem quer mudar o mundo — ou pelo menos as regras do jogo.' },
+  { name: 'O Mago',        color: '#4070FF', icon: '✧',  desc: 'Visionário, transformador e carismático. Realiza sonhos e transforma realidades. Marcas mágicas prometem experiências extraordinárias e criam momentos que parecem impossíveis até acontecerem.' },
+  { name: 'O Cara Comum',  color: '#4070FF', icon: '◉',  desc: 'Empático, confiável e real. Pertence ao grupo e fala a língua de todos. Marcas do cara comum constroem conexão genuína pela igualdade — sem elitismo, sem pose, apenas autenticidade.' },
+  { name: 'O Amante',      color: '#4070FF', icon: '♡',  desc: 'Apaixonado, sensual e comprometido. Cria conexões profundas e experiências inesquecíveis. Marcas amantes seduzem pelo desejo, pela beleza e pela promessa de uma relação intensa e exclusiva.' },
+  { name: 'O Bobo',        color: '#4070FF', icon: '★',  desc: 'Divertido, irreverente e espontâneo. Traz leveza e humor para tudo. Marcas bobas criam alegria genuína — são as que fazem o público sorrir, compartilhar e associar a momentos felizes.' },
+  { name: 'O Cuidador',    color: '#4070FF', icon: '❋',  desc: 'Generoso, protetor e empático. Serve ao próximo com dedicação. Marcas cuidadoras criam laços de confiança e lealdade ao colocar o bem-estar do cliente acima de qualquer outra coisa.' },
+  { name: 'O Criador',     color: '#4070FF', icon: '◬',  desc: 'Inovador, artístico e visionário. Constrói coisas novas com propósito. Marcas criadoras valorizam originalidade e expressão — inspiram seu público a também criar, imaginar e inovar.' },
+  { name: 'O Governante',  color: '#4070FF', icon: '♛',  desc: 'Líder, responsável e controlador. Cria ordem, estabilidade e excelência. Marcas governantes transmitem autoridade e prestígio — são escolhidas por quem busca o melhor e quer demonstrar status.' },
 ];
 
 export function getArchetype(name: string): Archetype | undefined {
