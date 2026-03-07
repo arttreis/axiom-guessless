@@ -11,17 +11,17 @@ export function PostStats({ posts }: PostStatsProps) {
   const scheduled = posts.filter((p) => p.status === 'scheduled').length;
 
   const stats = [
-    { label: 'Total', value: total, color: '#FF922B' },
-    { label: 'Publicados', value: published, color: '#1A936F' },
-    { label: 'Rascunhos', value: drafts, color: '#A0A0B0' },
-    { label: 'Agendados', value: scheduled, color: '#4D96FF' },
+    { label: 'Total',      value: total     },
+    { label: 'Publicados', value: published },
+    { label: 'Rascunhos',  value: drafts    },
+    { label: 'Agendados',  value: scheduled },
   ];
 
   return (
     <div className="post-stats-grid">
       {stats.map((stat) => (
         <div key={stat.label} className="stat-card">
-          <div className="stat-value" style={{ color: stat.color }}>
+          <div className="stat-value">
             {stat.value}
           </div>
           <div className="stat-label">{stat.label}</div>

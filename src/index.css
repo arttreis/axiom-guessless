@@ -27,18 +27,18 @@
 
   /* ── Superfícies dark (mais profundas) ── */
   --dark:   #00060E;   /* preto azulado profundo */
-  --dark-2: #040D1A;   /* sidebar / nav */
-  --dark-3: #081422;   /* cards */
-  --dark-4: #0C1C38;   /* inputs / sub-cards */
+  --dark-2: #060F1E;   /* sidebar / nav */
+  --dark-3: #1A2E4A;   /* cards */
+  --dark-4: #1E3355;   /* inputs / sub-cards */
 
   /* ── Tokens semânticos ── */
-  --card-border:        rgba(61,111,248,0.18);
-  --card-border-strong: rgba(61,111,248,0.35);
-  --input-bg:           #0F2040;
+  --card-border:        rgba(61,111,248,0.30);
+  --card-border-strong: rgba(61,111,248,0.52);
+  --input-bg:           #16294A;
   --overlay-bg:         rgba(0,0,0,0.70);
 
   /* ── Texto ── */
-  --text-primary:   #EDF2FF;
+  --text-primary:   #F5F9FF;
   --text-secondary: #7B96C4;
   --text-muted:     #4A6080;
 
@@ -47,7 +47,7 @@
   --shadow-md:         0 4px 24px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.35);
   --shadow-lg:         0 12px 48px rgba(0,0,0,0.65), 0 4px 16px rgba(0,0,0,0.4);
   --shadow-orange:     0 0 0 1px rgba(64,112,255,0.35), 0 8px 32px rgba(64,112,255,0.5);
-  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(61,111,248,0.2);
+  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(61,111,248,0.40);
 
   --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
 }
@@ -1353,7 +1353,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   border-radius: 12px;
   text-align: center;
 }
-.stat-value { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; margin-bottom: 0.25rem; }
+.stat-value { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; margin-bottom: 0.25rem; color: var(--text-primary); }
 .stat-label { font-size: 0.8rem; color: var(--text-muted); }
 
 /* Post Filter */
@@ -1629,7 +1629,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   transition: border-color 0.2s, transform 0.2s var(--ease-out-cubic), box-shadow 0.2s;
 }
 .metrics-card:hover { border-color: rgba(61,111,248,0.35); transform: translateY(-2px); box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(61,111,248,0.15); }
-.metrics-card-icon { font-size: 1.5rem; color: var(--orange); flex-shrink: 0; }
+.metrics-card-icon { font-size: 1.5rem; color: var(--brand); flex-shrink: 0; }
 .metrics-card-value {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 2rem;
@@ -1637,6 +1637,7 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   line-height: 1;
   margin-bottom: 0.25rem;
   letter-spacing: -0.03em;
+  color: var(--text-primary);
 }
 .metrics-card-label { font-size: 0.82rem; color: var(--text-secondary); font-weight: 500; }
 .metrics-card-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
