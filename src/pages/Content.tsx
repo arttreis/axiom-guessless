@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LayoutGrid, List, Plus, X } from 'lucide-react';
+import { LayoutGrid, List, Plus, X, Trash2, CheckSquare, AlertCircle } from 'lucide-react';
 import { ContentGenerator } from '../components/content/ContentGenerator';
 import { PostCard } from '../components/content/PostCard';
 import { PostFilter, type FilterValue } from '../components/content/PostFilter';
@@ -7,7 +7,7 @@ import { PostStats } from '../components/content/PostStats';
 import { usePosts } from '../hooks/usePosts';
 import { useOnboarding } from '../hooks/useOnboarding';
 import { showToast } from '../components/Toast';
-import type { GeneratedPost, OnboardingData } from '../types';
+import type { GeneratedPost, OnboardingData, Post } from '../types';
 
 type ViewMode = 'grid' | 'list';
 
@@ -17,6 +17,8 @@ export function Content() {
   const [showGenerator, setShowGenerator] = useState(false);
   const [filter, setFilter] = useState<FilterValue>('Todos');
   const [view, setView] = useState<ViewMode>('grid');
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [regeneratingPost, setRegeneratingPost] = useState<Post | null>(null);
 
   useEffect(() => {
     if (onboarding && archetypeResult) {
@@ -43,8 +45,46 @@ export function Content() {
     if (!ok) showToast('error', 'Erro ao atualizar status.');
   };
 
+  const handleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const handleBulkDelete = async () => {
+    const ids = Array.from(selectedIds);
+    await Promise.all(ids.map(id => deletePost(id)));
+    showToast('success', `${ids.length} post(s) excluído(s).`);
+    setSelectedIds(new Set());
+  };
+
+  const handleBulkPublish = async () => {
+    const ids = Array.from(selectedIds);
+    await Promise.all(ids.map(id => updatePostStatus(id, 'published')));
+    showToast('success', `${ids.length} post(s) publicado(s).`);
+    setSelectedIds(new Set());
+  };
+
+  const handleRegenerate = (post: Post) => {
+    setRegeneratingPost(post);
+    setShowGenerator(true);
+  };
+
+  const onboardingData = onboarding as Partial<Record<string, string>> | null;
+  const onboardingIncomplete = onboardingData && (!onboardingData.brand_name || !onboardingData.brand_description);
+
   return (
     <div className="content-page animate-fade-up">
+      {onboardingIncomplete && (
+        <div className="onboarding-banner">
+          <AlertCircle size={16} className="onboarding-banner-icon" />
+          <span>Complete seu perfil de marca para posts mais personalizados.</span>
+          <a href="/onboarding" className="onboarding-banner-link">Completar agora</a>
+        </div>
+      )}
+
       <div className="content-header">
         <div>
           <div className="dashboard-label">CONTEÚDO</div>
@@ -53,7 +93,20 @@ export function Content() {
           </h1>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          {/* Toggle view */}
+          {selectedIds.size > 0 && (
+            <div className="bulk-action-bar">
+              <span className="bulk-count">{selectedIds.size} selecionado(s)</span>
+              <button className="bulk-btn bulk-btn--publish" onClick={() => void handleBulkPublish()}>
+                <CheckSquare size={13} /> Publicar
+              </button>
+              <button className="bulk-btn bulk-btn--delete" onClick={() => void handleBulkDelete()}>
+                <Trash2 size={13} /> Excluir
+              </button>
+              <button className="bulk-btn" onClick={() => setSelectedIds(new Set())}>
+                <X size={13} />
+              </button>
+            </div>
+          )}
           <div className="view-toggle">
             <button
               className={`view-btn${view === 'grid' ? ' view-btn--active' : ''}`}
@@ -72,7 +125,7 @@ export function Content() {
           </div>
           <button
             className={showGenerator ? 'btn-outline' : 'btn-primary'}
-            onClick={() => setShowGenerator(!showGenerator)}
+            onClick={() => { setShowGenerator(!showGenerator); if (showGenerator) setRegeneratingPost(null); }}
           >
             {showGenerator ? <><X size={14} /> Fechar</> : <><Plus size={14} /> Gerar</>}
           </button>
@@ -84,6 +137,7 @@ export function Content() {
           brandContext={onboarding ?? {}}
           primaryArchetype={archetypeResult?.primary_archetype ?? 'O Herói'}
           onGenerated={handleGenerated}
+          regeneratePost={regeneratingPost ?? undefined}
         />
       )}
 
@@ -107,8 +161,11 @@ export function Content() {
               key={post.id}
               post={post}
               listView={view === 'list'}
+              selected={selectedIds.has(post.id)}
+              onSelect={handleSelect}
               onDelete={handleDelete}
               onStatusChange={handleStatusChange}
+              onRegenerate={handleRegenerate}
             />
           ))}
         </div>

@@ -1,18 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { generatePost } from '../../lib/anthropic';
-import type { OnboardingData, GeneratedPost } from '../../types';
+import type { OnboardingData, GeneratedPost, Post } from '../../types';
 
 interface ContentGeneratorProps {
   brandContext: Partial<OnboardingData>;
   primaryArchetype: string;
   onGenerated: (post: GeneratedPost) => void;
+  regeneratePost?: Post;
 }
 
-export function ContentGenerator({ brandContext, primaryArchetype, onGenerated }: ContentGeneratorProps) {
+export function ContentGenerator({ brandContext, primaryArchetype, onGenerated, regeneratePost }: ContentGeneratorProps) {
   const [prompt, setPrompt] = useState('');
   const [platform, setPlatform] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (regeneratePost) {
+      setPrompt(`Reescreva este post com uma abordagem diferente: "${regeneratePost.title}"`);
+      setPlatform(regeneratePost.platform);
+    }
+  }, [regeneratePost]);
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
@@ -35,7 +43,9 @@ export function ContentGenerator({ brandContext, primaryArchetype, onGenerated }
     <div className="content-generator">
       <div className="generator-header">
         <span className="generator-icon">IA</span>
-        <span className="generator-title">Gerar Conteúdo com IA</span>
+        <span className="generator-title">
+          {regeneratePost ? `Regenerar: ${regeneratePost.platform}` : 'Gerar Conteúdo com IA'}
+        </span>
       </div>
 
       <textarea

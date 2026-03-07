@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Instagram, Linkedin, Twitter, Youtube, Trash2, ChevronRight, Hash, Lightbulb, Heart } from 'lucide-react';
+import { Instagram, Linkedin, Twitter, Youtube, Trash2, ChevronRight, Hash, Lightbulb, Copy, Check, RefreshCw } from 'lucide-react';
 import type { Post } from '../../types';
 
 const PLATFORM_ICONS: Record<string, React.ReactNode> = {
@@ -20,13 +20,31 @@ const STATUS_CYCLE: Array<'draft' | 'published' | 'scheduled'> = ['draft', 'publ
 interface PostCardProps {
   post: Post;
   listView?: boolean;
+  selected?: boolean;
+  onSelect?: (id: string) => void;
   onDelete?: (id: string) => void;
   onStatusChange?: (id: string, status: 'draft' | 'published' | 'scheduled') => void;
+  onRegenerate?: (post: Post) => void;
 }
 
-export function PostCard({ post, listView, onDelete, onStatusChange }: PostCardProps) {
+export function PostCard({ post, listView, selected, onSelect, onDelete, onStatusChange, onRegenerate }: PostCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
   const cfg = STATUS_CONFIG[post.status] ?? STATUS_CONFIG.draft;
+
+  const handleCopy = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const text = `${post.title}\n\n${post.content}${post.hashtags?.length ? '\n\n' + post.hashtags.join(' ') : ''}`;
+    void navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  const handleRegenerate = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onRegenerate?.(post);
+  };
 
   const handleStatus = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -130,8 +148,24 @@ export function PostCard({ post, listView, onDelete, onStatusChange }: PostCardP
           {post.archetype && <span className="post-archetype">· {post.archetype}</span>}
         </div>
         <div className="post-footer-right">
-          <span className="post-likes"><Heart size={11} /> {post.likes}</span>
-          <span className="post-engagement">{post.engagement}</span>
+          {onSelect && (
+            <input
+              type="checkbox"
+              className="post-select-checkbox"
+              checked={selected ?? false}
+              onChange={e => { e.stopPropagation(); onSelect(post.id); }}
+              onClick={e => e.stopPropagation()}
+              title="Selecionar"
+            />
+          )}
+          {onRegenerate && (
+            <button className="post-action-btn" onClick={handleRegenerate} title="Regenerar com IA">
+              <RefreshCw size={12} />
+            </button>
+          )}
+          <button className="post-action-btn" onClick={handleCopy} title="Copiar post">
+            {copied ? <Check size={12} style={{ color: '#4ade80' }} /> : <Copy size={12} />}
+          </button>
         </div>
       </div>
     </div>

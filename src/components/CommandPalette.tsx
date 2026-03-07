@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Sparkles, BarChart2, User, X, Search } from 'lucide-react';
+import { LayoutDashboard, Sparkles, BarChart2, User, X, Search, FileText } from 'lucide-react';
+import type { Post } from '../types';
 
-const COMMANDS = [
+const NAV_COMMANDS = [
   { id: 'dashboard',  label: 'Relatório da Marca', icon: <LayoutDashboard size={16} />, to: '/dashboard' },
   { id: 'content',    label: 'Conteúdo',           icon: <Sparkles size={16} />,        to: '/dashboard/content' },
   { id: 'analytics',  label: 'Analytics',          icon: <BarChart2 size={16} />,       to: '/dashboard/analytics' },
@@ -12,17 +13,31 @@ const COMMANDS = [
 interface Props {
   open: boolean;
   onClose: () => void;
+  posts?: Post[];
 }
 
-export function CommandPalette({ open, onClose }: Props) {
+export function CommandPalette({ open, onClose, posts = [] }: Props) {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(0);
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const filtered = COMMANDS.filter(c =>
-    c.label.toLowerCase().includes(query.toLowerCase())
-  );
+  const q = query.toLowerCase();
+  const navFiltered = NAV_COMMANDS.filter(c => c.label.toLowerCase().includes(q));
+  const postFiltered = query.length >= 2
+    ? posts.filter(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.content.toLowerCase().includes(q) ||
+        p.platform.toLowerCase().includes(q)
+      ).slice(0, 4).map(p => ({
+        id: p.id,
+        label: p.title,
+        sub: p.platform,
+        icon: <FileText size={16} />,
+        to: '/dashboard/content',
+      }))
+    : [];
+  const filtered = [...navFiltered, ...postFiltered];
 
   useEffect(() => {
     if (open) { setQuery(''); setSelected(0); setTimeout(() => inputRef.current?.focus(), 50); }
@@ -62,20 +77,32 @@ export function CommandPalette({ open, onClose }: Props) {
           <button className="cmd-close" onClick={onClose}><X size={14} /></button>
         </div>
         <div className="cmd-results">
+          {postFiltered.length > 0 && navFiltered.length > 0 && query.length >= 2 && (
+            <div className="cmd-section-label">Navegação</div>
+          )}
           {filtered.length === 0 ? (
             <div className="cmd-empty">Nenhum resultado para "{query}"</div>
-          ) : filtered.map((cmd, i) => (
-            <button
-              key={cmd.id}
-              className={`cmd-item${i === selected ? ' cmd-item--active' : ''}`}
-              onClick={() => { navigate(cmd.to); onClose(); }}
-              onMouseEnter={() => setSelected(i)}
-            >
-              <span className="cmd-item-icon">{cmd.icon}</span>
-              <span className="cmd-item-label">{cmd.label}</span>
-              {i === selected && <kbd className="cmd-item-enter">↵</kbd>}
-            </button>
-          ))}
+          ) : filtered.map((cmd, i) => {
+            const isPostStart = i === navFiltered.length && postFiltered.length > 0;
+            return (
+              <>
+                {isPostStart && <div key="posts-label" className="cmd-section-label">Posts</div>}
+                <button
+                  key={cmd.id}
+                  className={`cmd-item${i === selected ? ' cmd-item--active' : ''}`}
+                  onClick={() => { navigate(cmd.to); onClose(); }}
+                  onMouseEnter={() => setSelected(i)}
+                >
+                  <span className="cmd-item-icon">{cmd.icon}</span>
+                  <span className="cmd-item-label">
+                    {cmd.label}
+                    {'sub' in cmd && (cmd as { sub?: string }).sub && <span className="cmd-item-sub"> · {(cmd as { sub?: string }).sub}</span>}
+                  </span>
+                  {i === selected && <kbd className="cmd-item-enter">↵</kbd>}
+                </button>
+              </>
+            );
+          })}
         </div>
         <div className="cmd-footer">
           <span><kbd>↑↓</kbd> navegar</span>

@@ -52,6 +52,7 @@ export interface Profile {
   id: string;
   name: string;
   email: string;
+  avatar_url?: string;
   plan: 'trial' | 'starter' | 'pro' | 'agency';
   role: 'client' | 'admin';
   stripe_customer_id: string;

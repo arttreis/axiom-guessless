@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Download } from 'lucide-react';
 import { ArchetypeHero } from '../components/dashboard/ArchetypeHero';
 import { ArchetypeGrid } from '../components/dashboard/ArchetypeGrid';
 import { BrandProfile } from '../components/dashboard/BrandProfile';
@@ -35,14 +36,19 @@ export function Dashboard() {
     <div className="dashboard-content animate-fade-up">
       {/* Header */}
       <div className="dashboard-header">
-        <h1 className="dashboard-brand-name">{brandName}</h1>
-        {keywords && (
-          <div className="dashboard-keywords">
-            {keywords.split(/[,;]+/).map((kw) => kw.trim()).filter(Boolean).map((kw) => (
-              <span key={kw} className="keyword-tag">{kw}</span>
-            ))}
-          </div>
-        )}
+        <div>
+          <h1 className="dashboard-brand-name">{brandName}</h1>
+          {keywords && (
+            <div className="dashboard-keywords">
+              {keywords.split(/[,;]+/).map((kw) => kw.trim()).filter(Boolean).map((kw) => (
+                <span key={kw} className="keyword-tag">{kw}</span>
+              ))}
+            </div>
+          )}
+        </div>
+        <button className="btn-outline btn-export-pdf" onClick={() => window.print()} title="Exportar como PDF">
+          <Download size={14} /> Exportar PDF
+        </button>
       </div>
 
       {/* Hero do arquétipo principal */}

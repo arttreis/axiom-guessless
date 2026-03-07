@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { Camera } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 import { useProfile } from '../../hooks/useProfile';
+import { useAuthStore } from '../../store/authStore';
 
 export function ProfileForm() {
   const { profile, saving, error, updateProfile } = useProfile();
+  const { user } = useAuthStore();
   const [name, setName] = useState(profile?.name ?? '');
   const [saved, setSaved] = useState(false);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string>(profile?.avatar_url ?? '');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,9 +20,51 @@ export function ProfileForm() {
     setTimeout(() => setSaved(false), 2000);
   };
 
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setAvatarUploading(true);
+    const ext = file.name.split('.').pop();
+    const path = `${user.id}/avatar.${ext}`;
+    const { error: uploadErr } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
+    if (!uploadErr) {
+      const { data } = supabase.storage.from('avatars').getPublicUrl(path);
+      const url = `${data.publicUrl}?t=${Date.now()}`;
+      setAvatarUrl(url);
+      await updateProfile({ name, avatar_url: url } as Parameters<typeof updateProfile>[0]);
+    }
+    setAvatarUploading(false);
+  };
+
+  const initials = (profile?.name ?? profile?.email ?? '?').slice(0, 2).toUpperCase();
+
   return (
     <form className="account-form" onSubmit={handleSubmit}>
       <h3 className="account-section-title">Perfil</h3>
+
+      {/* Avatar */}
+      <div className="avatar-upload-wrap">
+        <div className="avatar-circle" onClick={() => fileInputRef.current?.click()}>
+          {avatarUrl
+            ? <img src={avatarUrl} alt="avatar" className="avatar-img" />
+            : <span className="avatar-initials">{initials}</span>
+          }
+          <div className="avatar-overlay">
+            {avatarUploading ? <span className="spinner" /> : <Camera size={16} />}
+          </div>
+        </div>
+        <div className="avatar-info">
+          <span className="avatar-hint">Clique para alterar a foto</span>
+          <span className="avatar-sub">JPG, PNG ou WEBP — máx. 2MB</span>
+        </div>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={e => void handleAvatarChange(e)}
+        />
+      </div>
 
       <div className="form-field">
         <label className="form-label">Nome</label>

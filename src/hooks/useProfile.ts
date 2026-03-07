@@ -7,7 +7,7 @@ export function useProfile() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const updateProfile = async (updates: { name?: string }) => {
+  const updateProfile = async (updates: { name?: string; avatar_url?: string }) => {
     if (!user) return;
     setSaving(true);
     setError(null);
