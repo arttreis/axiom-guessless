@@ -82,7 +82,12 @@ export function Sidebar() {
 
       <div className="sidebar-user">
         <div className="user-info">
-          <div className="user-avatar">{profile?.name?.[0]?.toUpperCase() ?? 'U'}</div>
+          <div className="user-avatar">
+            {profile?.avatar_url
+              ? <img src={profile.avatar_url} alt="avatar" className="user-avatar-img" />
+              : (profile?.name?.[0]?.toUpperCase() ?? 'U')
+            }
+          </div>
           <div className="user-details">
             <div className="user-name">{profile?.name ?? 'Usuário'}</div>
             <div className="user-email">{profile?.email ?? ''}</div>

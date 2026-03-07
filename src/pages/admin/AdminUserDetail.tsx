@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Instagram, Linkedin, Twitter, Youtube, FileText } from 'lucide-react';
+import { ArrowLeft, Instagram, Linkedin, Twitter, Youtube, FileText, Camera, Check } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ArchetypeHero } from '../../components/dashboard/ArchetypeHero';
 import { ArchetypeGrid } from '../../components/dashboard/ArchetypeGrid';
@@ -57,12 +57,18 @@ export function AdminUserDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [profile,    setProfile]    = useState<Profile | null>(null);
-  const [onboarding, setOnboarding] = useState<Partial<OnboardingData> | null>(null);
-  const [archetype,  setArchetype]  = useState<ArchetypeResult | null>(null);
-  const [posts,      setPosts]      = useState<Post[]>([]);
-  const [tab,        setTab]        = useState<'brand' | 'posts' | 'account'>('brand');
-  const [loading,    setLoading]    = useState(true);
+  const [profile,         setProfile]         = useState<Profile | null>(null);
+  const [onboarding,      setOnboarding]      = useState<Partial<OnboardingData> | null>(null);
+  const [archetype,       setArchetype]       = useState<ArchetypeResult | null>(null);
+  const [posts,           setPosts]           = useState<Post[]>([]);
+  const [tab,             setTab]             = useState<'brand' | 'posts' | 'account'>('brand');
+  const [loading,         setLoading]         = useState(true);
+  const [editName,        setEditName]        = useState('');
+  const [editAvatarUrl,   setEditAvatarUrl]   = useState('');
+  const [saving,          setSaving]          = useState(false);
+  const [saved,           setSaved]           = useState(false);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -79,7 +85,11 @@ export function AdminUserDetail() {
         supabase.from('archetype_results').select('*').eq('user_id', id).single(),
         supabase.from('posts').select('*').eq('user_id', id).order('created_at', { ascending: false }),
       ]);
-      if (prof) setProfile(prof as Profile);
+      if (prof) {
+        setProfile(prof as Profile);
+        setEditName((prof as Profile).name ?? '');
+        setEditAvatarUrl((prof as Profile).avatar_url ?? '');
+      }
       if (onb)  setOnboarding(onb as Partial<OnboardingData>);
       if (arch) setArchetype(arch as ArchetypeResult);
       if (ps)   setPosts(ps as Post[]);
@@ -109,6 +119,34 @@ export function AdminUserDetail() {
   }
 
   const brandName = onboarding?.brand_name ?? profile.name ?? profile.email;
+
+  const handleSaveProfile = async () => {
+    if (!id) return;
+    setSaving(true);
+    await supabase.from('profiles').update({ name: editName, avatar_url: editAvatarUrl }).eq('id', id);
+    setProfile(prev => prev ? { ...prev, name: editName, avatar_url: editAvatarUrl } : prev);
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+
+  const handleAdminAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !id) return;
+    setAvatarUploading(true);
+    const ext = file.name.split('.').pop();
+    const path = `${id}/avatar.${ext}`;
+    const { error } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
+    if (!error) {
+      const { data } = supabase.storage.from('avatars').getPublicUrl(path);
+      setEditAvatarUrl(`${data.publicUrl}?t=${Date.now()}`);
+    }
+    setAvatarUploading(false);
+  };
+
+  const handleClearAvatar = async () => {
+    setEditAvatarUrl('');
+  };
 
   return (
     <div className="dashboard-content animate-fade-up">
@@ -266,17 +304,70 @@ export function AdminUserDetail() {
       {/* TAB: Conta */}
       {tab === 'account' && (
         <div className="account-grid">
+          {/* Edição de perfil */}
           <div className="account-card">
-            <h3 className="account-section-title">Informações Pessoais</h3>
-            <div className="admin-detail-fields">
-              <Field label="Nome"          value={profile.name} />
-              <Field label="E-mail"        value={profile.email} />
-              <Field label="Membro desde"  value={new Date(profile.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })} />
-              <Field label="Última atualização" value={new Date(profile.updated_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })} />
-              <Field label="Papel (role)"  value={profile.role} />
+            <h3 className="account-section-title">Editar Perfil</h3>
+
+            {/* Avatar editável */}
+            <div className="avatar-upload-wrap" style={{ marginBottom: '1rem' }}>
+              <div className="avatar-circle" onClick={() => fileInputRef.current?.click()}>
+                {editAvatarUrl
+                  ? <img src={editAvatarUrl} alt="avatar" className="avatar-img" />
+                  : <span className="avatar-initials">{(editName || profile.email).slice(0, 2).toUpperCase()}</span>
+                }
+                <div className="avatar-overlay">
+                  {avatarUploading ? <span className="spinner" /> : <Camera size={16} />}
+                </div>
+              </div>
+              <div className="avatar-info">
+                <span className="avatar-hint">Clique para alterar a foto</span>
+                {editAvatarUrl && (
+                  <button
+                    className="admin-clear-avatar-btn"
+                    onClick={handleClearAvatar}
+                    type="button"
+                  >
+                    Remover foto
+                  </button>
+                )}
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={e => void handleAdminAvatarUpload(e)}
+              />
             </div>
+
+            <div className="form-field" style={{ marginBottom: '0.75rem' }}>
+              <label className="form-label">Nome</label>
+              <input
+                className="form-input"
+                value={editName}
+                onChange={e => setEditName(e.target.value)}
+                placeholder="Nome do usuário"
+              />
+            </div>
+            <div className="form-field" style={{ marginBottom: '1rem' }}>
+              <label className="form-label">E-mail</label>
+              <input className="form-input" value={profile.email} disabled />
+            </div>
+
+            <button
+              className="btn-primary"
+              onClick={() => void handleSaveProfile()}
+              disabled={saving}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+            >
+              {saved
+                ? <><Check size={14} /> Salvo!</>
+                : saving ? 'Salvando...' : 'Salvar alterações'
+              }
+            </button>
           </div>
 
+          {/* Info de assinatura (leitura) */}
           <div className="account-card">
             <h3 className="account-section-title">Assinatura</h3>
             <div className="admin-detail-fields">
@@ -289,10 +380,12 @@ export function AdminUserDetail() {
                   {profile.plan}
                 </span>
               </div>
-              <Field label="Status"                value={profile.subscription_status} />
-              <Field label="Trial expira em"       value={profile.trial_ends_at ? new Date(profile.trial_ends_at).toLocaleDateString('pt-BR') : undefined} />
-              <Field label="Stripe Customer ID"    value={profile.stripe_customer_id} />
-              <Field label="Stripe Subscription"   value={profile.stripe_subscription_id} />
+              <Field label="Status"              value={profile.subscription_status} />
+              <Field label="Trial expira em"     value={profile.trial_ends_at ? new Date(profile.trial_ends_at).toLocaleDateString('pt-BR') : undefined} />
+              <Field label="Membro desde"        value={new Date(profile.created_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })} />
+              <Field label="Stripe Customer ID"  value={profile.stripe_customer_id} />
+              <Field label="Stripe Subscription" value={profile.stripe_subscription_id} />
+              <Field label="Papel (role)"        value={profile.role} />
             </div>
           </div>
         </div>

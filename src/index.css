@@ -452,7 +452,9 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
   color: #fff;
   flex-shrink: 0;
   box-shadow: 0 0 0 2px rgba(61,111,248,0.35);
+  overflow: hidden;
 }
+.user-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
 .user-details { overflow: hidden; }
 .user-name { font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.01em; }
 .user-email { font-size: 0.72rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1766,6 +1768,8 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 .avatar-info { display: flex; flex-direction: column; gap: 0.2rem; }
 .avatar-hint { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); }
 .avatar-sub { font-size: 0.78rem; color: var(--text-muted); }
+.admin-clear-avatar-btn { font-size: 0.78rem; color: #f87171; background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline; font-family: 'Plus Jakarta Sans', sans-serif; }
+.admin-clear-avatar-btn:hover { opacity: 0.75; }
 .plan-info-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
 .plan-name-large { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.25rem; font-weight: 800; text-transform: capitalize; }
 .plan-trial-info { font-size: 0.85rem; color: var(--amber); }
