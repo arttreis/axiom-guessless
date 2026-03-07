@@ -11,6 +11,7 @@ export function ProfileForm() {
   const [saved, setSaved] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('');
+  const [avatarError, setAvatarError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const nameInitialized = useRef(false);
 
@@ -38,15 +39,19 @@ export function ProfileForm() {
     const file = e.target.files?.[0];
     if (!file || !user) return;
     setAvatarUploading(true);
+    setAvatarError('');
     const ext = file.name.split('.').pop();
     const path = `${user.id}/avatar.${ext}`;
     const { error: uploadErr } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
-    if (!uploadErr) {
-      const { data } = supabase.storage.from('avatars').getPublicUrl(path);
-      const url = `${data.publicUrl}?t=${Date.now()}`;
-      setAvatarUrl(url);
-      await updateProfile({ name, avatar_url: url } as Parameters<typeof updateProfile>[0]);
+    if (uploadErr) {
+      setAvatarError(`Erro: ${uploadErr.message}`);
+      setAvatarUploading(false);
+      return;
     }
+    const { data } = supabase.storage.from('avatars').getPublicUrl(path);
+    const url = `${data.publicUrl}?t=${Date.now()}`;
+    setAvatarUrl(url);
+    await updateProfile({ name, avatar_url: url });
     setAvatarUploading(false);
   };
 
@@ -70,6 +75,7 @@ export function ProfileForm() {
         <div className="avatar-info">
           <span className="avatar-hint">Clique para alterar a foto</span>
           <span className="avatar-sub">JPG, PNG ou WEBP — máx. 2MB</span>
+          {avatarError && <span style={{ fontSize: '0.78rem', color: '#f87171' }}>{avatarError}</span>}
         </div>
         <input
           ref={fileInputRef}

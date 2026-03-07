@@ -68,6 +68,7 @@ export function AdminUserDetail() {
   const [saving,          setSaving]          = useState(false);
   const [saved,           setSaved]           = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [uploadError,     setUploadError]     = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -134,18 +135,43 @@ export function AdminUserDetail() {
     const file = e.target.files?.[0];
     if (!file || !id) return;
     setAvatarUploading(true);
+    setUploadError('');
     const ext = file.name.split('.').pop();
     const path = `${id}/avatar.${ext}`;
-    const { error } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
-    if (!error) {
-      const { data } = supabase.storage.from('avatars').getPublicUrl(path);
-      setEditAvatarUrl(`${data.publicUrl}?t=${Date.now()}`);
+    const { error: uploadErr } = await supabase.storage
+      .from('avatars')
+      .upload(path, file, { upsert: true });
+
+    if (uploadErr) {
+      setUploadError(`Erro no upload: ${uploadErr.message}`);
+      setAvatarUploading(false);
+      return;
+    }
+
+    const { data } = supabase.storage.from('avatars').getPublicUrl(path);
+    const url = `${data.publicUrl}?t=${Date.now()}`;
+    setEditAvatarUrl(url);
+
+    // Salva imediatamente no banco sem precisar clicar em Salvar
+    const { error: dbErr } = await supabase
+      .from('profiles')
+      .update({ avatar_url: url })
+      .eq('id', id);
+
+    if (dbErr) {
+      setUploadError(`Upload ok, mas erro ao salvar: ${dbErr.message}`);
+    } else {
+      setProfile(prev => prev ? { ...prev, avatar_url: url } : prev);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
     }
     setAvatarUploading(false);
   };
 
   const handleClearAvatar = async () => {
     setEditAvatarUrl('');
+    await supabase.from('profiles').update({ avatar_url: null }).eq('id', id ?? '');
+    setProfile(prev => prev ? { ...prev, avatar_url: undefined } : prev);
   };
 
   return (
@@ -339,6 +365,9 @@ export function AdminUserDetail() {
                 onChange={e => void handleAdminAvatarUpload(e)}
               />
             </div>
+            {uploadError && (
+              <p style={{ fontSize: '0.8rem', color: '#f87171', marginBottom: '0.75rem' }}>{uploadError}</p>
+            )}
 
             <div className="form-field" style={{ marginBottom: '0.75rem' }}>
               <label className="form-label">Nome</label>
