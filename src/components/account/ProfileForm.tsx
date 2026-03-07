@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Camera } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useProfile } from '../../hooks/useProfile';
@@ -7,11 +7,25 @@ import { useAuthStore } from '../../store/authStore';
 export function ProfileForm() {
   const { profile, saving, error, updateProfile } = useProfile();
   const { user } = useAuthStore();
-  const [name, setName] = useState(profile?.name ?? '');
+  const [name, setName] = useState('');
   const [saved, setSaved] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string>(profile?.avatar_url ?? '');
+  const [avatarUrl, setAvatarUrl] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const nameInitialized = useRef(false);
+
+  // Inicializa o nome uma única vez quando o profile carrega
+  useEffect(() => {
+    if (profile && !nameInitialized.current) {
+      setName(profile.name ?? '');
+      nameInitialized.current = true;
+    }
+  }, [profile]);
+
+  // Avatar sempre sincroniza com o store (atualizado após upload)
+  useEffect(() => {
+    setAvatarUrl(profile?.avatar_url ?? '');
+  }, [profile?.avatar_url]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

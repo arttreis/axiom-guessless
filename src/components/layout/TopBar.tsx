@@ -32,7 +32,10 @@ export function TopBar({ onOpenCmd }: TopBarProps) {
           <kbd>⌘K</kbd>
         </button>
         <div className="topbar-avatar" title={profile?.name ?? ''}>
-          {profile?.name?.[0]?.toUpperCase() ?? 'U'}
+          {profile?.avatar_url
+            ? <img src={profile.avatar_url} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', display: 'block' }} />
+            : (profile?.name?.[0]?.toUpperCase() ?? 'U')
+          }
         </div>
       </div>
     </div>
