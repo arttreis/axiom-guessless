@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Camera } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
 import { useProfile } from '../../hooks/useProfile';
-import { useAuthStore } from '../../store/authStore';
 
 export function ProfileForm() {
   const { profile, saving, error, updateProfile } = useProfile();
-  const { user } = useAuthStore();
   const [name, setName] = useState('');
   const [saved, setSaved] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
@@ -37,22 +34,25 @@ export function ProfileForm() {
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file || !user) return;
-    setAvatarUploading(true);
-    setAvatarError('');
-    const ext = file.name.split('.').pop();
-    const path = `${user.id}/avatar.${ext}`;
-    const { error: uploadErr } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
-    if (uploadErr) {
-      setAvatarError(`Erro: ${uploadErr.message}`);
-      setAvatarUploading(false);
+    if (!file || !profile) return;
+    if (file.size > 2 * 1024 * 1024) {
+      setAvatarError('Imagem muito grande. Máx. 2MB.');
       return;
     }
-    const { data } = supabase.storage.from('avatars').getPublicUrl(path);
-    const url = `${data.publicUrl}?t=${Date.now()}`;
-    setAvatarUrl(url);
-    await updateProfile({ name, avatar_url: url });
-    setAvatarUploading(false);
+    setAvatarUploading(true);
+    setAvatarError('');
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result as string;
+      setAvatarUrl(dataUrl);
+      await updateProfile({ name, avatar_url: dataUrl });
+      setAvatarUploading(false);
+    };
+    reader.onerror = () => {
+      setAvatarError('Erro ao ler o arquivo.');
+      setAvatarUploading(false);
+    };
+    reader.readAsDataURL(file);
   };
 
   const initials = (profile?.name ?? profile?.email ?? '?').slice(0, 2).toUpperCase();

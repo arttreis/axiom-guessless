@@ -134,38 +134,34 @@ export function AdminUserDetail() {
   const handleAdminAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !id) return;
-    setAvatarUploading(true);
-    setUploadError('');
-    const ext = file.name.split('.').pop();
-    const path = `${id}/avatar.${ext}`;
-    const { error: uploadErr } = await supabase.storage
-      .from('avatars')
-      .upload(path, file, { upsert: true });
-
-    if (uploadErr) {
-      setUploadError(`Erro no upload: ${uploadErr.message}`);
-      setAvatarUploading(false);
+    if (file.size > 2 * 1024 * 1024) {
+      setUploadError('Imagem muito grande. Máx. 2MB.');
       return;
     }
-
-    const { data } = supabase.storage.from('avatars').getPublicUrl(path);
-    const url = `${data.publicUrl}?t=${Date.now()}`;
-    setEditAvatarUrl(url);
-
-    // Salva imediatamente no banco sem precisar clicar em Salvar
-    const { error: dbErr } = await supabase
-      .from('profiles')
-      .update({ avatar_url: url })
-      .eq('id', id);
-
-    if (dbErr) {
-      setUploadError(`Upload ok, mas erro ao salvar: ${dbErr.message}`);
-    } else {
-      setProfile(prev => prev ? { ...prev, avatar_url: url } : prev);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2500);
-    }
-    setAvatarUploading(false);
+    setAvatarUploading(true);
+    setUploadError('');
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result as string;
+      setEditAvatarUrl(dataUrl);
+      const { error: dbErr } = await supabase
+        .from('profiles')
+        .update({ avatar_url: dataUrl })
+        .eq('id', id);
+      if (dbErr) {
+        setUploadError(`Erro ao salvar: ${dbErr.message}`);
+      } else {
+        setProfile(prev => prev ? { ...prev, avatar_url: dataUrl } : prev);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2500);
+      }
+      setAvatarUploading(false);
+    };
+    reader.onerror = () => {
+      setUploadError('Erro ao ler o arquivo.');
+      setAvatarUploading(false);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleClearAvatar = async () => {
