@@ -1,3 +1,5 @@
+import { Users, Clock, Zap, Star, Building2 } from 'lucide-react';
+
 interface GlobalMetricsProps {
   stats: {
     total: number;
@@ -8,23 +10,25 @@ interface GlobalMetricsProps {
   };
 }
 
-export function GlobalMetrics({ stats }: GlobalMetricsProps) {
-  const items = [
-    { label: 'Total de usuários', value: stats.total, icon: '◈' },
-    { label: 'Trial', value: stats.trial, icon: '⏱' },
-    { label: 'Starter', value: stats.starter, icon: '✦' },
-    { label: 'Pro', value: stats.pro, icon: '★' },
-    { label: 'Agency', value: stats.agency, icon: '⬡' },
-  ];
+const ITEMS = [
+  { key: 'total',   label: 'Total',   icon: Users,     color: '#3D6FF8' },
+  { key: 'trial',   label: 'Trial',   icon: Clock,     color: '#FF922B' },
+  { key: 'starter', label: 'Starter', icon: Zap,       color: '#7C5CBF' },
+  { key: 'pro',     label: 'Pro',     icon: Star,      color: '#1A936F' },
+  { key: 'agency',  label: 'Agency',  icon: Building2, color: '#3D6FF8' },
+] as const;
 
+export function GlobalMetrics({ stats }: GlobalMetricsProps) {
   return (
     <div className="admin-metrics-grid">
-      {items.map((item) => (
-        <div key={item.label} className="metrics-card">
-          <div className="metrics-card-icon">{item.icon}</div>
+      {ITEMS.map(({ key, label, icon: Icon, color }) => (
+        <div key={key} className="metrics-card">
+          <div className="metrics-card-icon" style={{ color }}>
+            <Icon size={20} />
+          </div>
           <div className="metrics-card-body">
-            <div className="metrics-card-value">{item.value}</div>
-            <div className="metrics-card-label">{item.label}</div>
+            <div className="metrics-card-value" style={{ color }}>{stats[key]}</div>
+            <div className="metrics-card-label">{label}</div>
           </div>
         </div>
       ))}

@@ -1900,6 +1900,39 @@ a:focus-visible, button:focus-visible { border-radius: 8px; }
 }
 .btn-table-action:hover { border-color: var(--orange); color: var(--text-primary); }
 
+/* User cards grid (admin) */
+.user-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0.75rem;
+}
+.user-card {
+  display: flex; align-items: center; gap: 1rem;
+  background: var(--dark-3); border: 1px solid var(--card-border);
+  border-radius: 14px; padding: 1rem 1.125rem;
+  cursor: pointer; transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+.user-card:hover {
+  border-color: rgba(61,111,248,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35), 0 0 0 1px rgba(61,111,248,0.15);
+}
+.user-card-avatar {
+  width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(61,111,248,0.15); border: 2px solid rgba(61,111,248,0.25);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.user-card-avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.user-card-avatar-initials { font-size: 1rem; font-weight: 800; color: var(--brand-light); letter-spacing: -0.03em; }
+.user-card-info { flex: 1; min-width: 0; }
+.user-card-name { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-card-email { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 0.1rem; }
+.user-card-meta { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+.user-card-status { display: flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+.user-card-since { font-size: 0.72rem; color: var(--text-muted); margin-left: auto; }
+.user-card-arrow { color: var(--text-muted); flex-shrink: 0; transition: color 0.15s, transform 0.15s; }
+.user-card:hover .user-card-arrow { color: var(--brand-light); transform: translateX(2px); }
+
 /* ============================================
    RESPONSIVE — MOBILE
    ============================================ */
