@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { ARCHETYPES } from '../../constants/archetypes';
 import type { Archetype } from '../../constants/archetypes';
@@ -56,7 +57,7 @@ export function ArchetypeGrid({ result }: ArchetypeGridProps) {
         </div>
       </div>
 
-      {selected && (
+      {selected && createPortal(
         <div className="arch-modal-overlay" onClick={() => setSelected(null)}>
           <div className="arch-modal" onClick={(e) => e.stopPropagation()}>
             <button className="arch-modal-close" onClick={() => setSelected(null)}>
@@ -71,7 +72,8 @@ export function ArchetypeGrid({ result }: ArchetypeGridProps) {
               Sua afinidade: <strong>{result.scores[selected.name] ?? 0}%</strong>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
